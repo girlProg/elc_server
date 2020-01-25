@@ -143,7 +143,7 @@ USE_TZ = True
 MEDIA_ROOT = BASE_DIR+'/media/'
 MEDIA_URL = '/media/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = '/home/username/webapps/static_esteem/'
+STATIC_ROOT = '/home/tymah/webapps/static_esteem/'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join('static'), )
