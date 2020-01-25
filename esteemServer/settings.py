@@ -88,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'esteem_pgdb',
-        'USERNAME': 'yeditech',
-        'PASSWORD': 'esteemdb',
+        'USERNAME': 'tymah',
+        'PASSWORD': 'tyeema',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
