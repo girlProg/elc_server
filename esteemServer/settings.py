@@ -25,7 +25,7 @@ SECRET_KEY = 'djot719$&uuhsgq%ycxtzcyf)k&qvk09_sn&@qb$i79-t(216q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -81,9 +81,17 @@ WSGI_APPLICATION = 'esteemServer.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'test': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'yeditect',
+        'USERNAME': 'esteem_pgdb',
+        'PASSWORD': 'esteemdb',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -134,7 +142,10 @@ USE_TZ = True
 
 MEDIA_ROOT = BASE_DIR+'/media/'
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = '/home/username/webapps/static_esteem/'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = ( os.path.join('esteemServer/static'), )
 
 CORS_ORIGIN_ALLOW_ALL = True
