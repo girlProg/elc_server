@@ -146,6 +146,6 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/username/webapps/static_esteem/'
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = ( os.path.join('esteemServer/static'), )
+STATICFILES_DIRS = ( os.path.join('static'), )
 
 CORS_ORIGIN_ALLOW_ALL = True
