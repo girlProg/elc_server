@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'salaryapp',
+    'coreapi'
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,10 @@ WSGI_APPLICATION = 'esteemServer.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'test': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'esteem_pgdb',
@@ -121,6 +122,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+
 }
 
 # Internationalization
@@ -147,5 +150,13 @@ STATIC_ROOT = '/home/tymah/webapps/static_esteem/'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join('static'), )
+
+
+#EMAIL
+ADMINS = (('MotorFixr App', 'hello@motorfixr.com'))
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'motorfixr_noreply'
+EMAIL_HOST_PASSWORD = 'motor01'
+SERVER_EMAIL = 'noreply@motorfixr.com'
 
 CORS_ORIGIN_ALLOW_ALL = True
