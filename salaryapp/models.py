@@ -37,15 +37,15 @@ class PensionCollector(ParentModel):
 class Staff(ParentModel):
     name = models.CharField(default= "", max_length=500, blank=True, null=True)
     pension_code = models.CharField(default= "", max_length=500, blank=True, null=True)
-    schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True,null=True)
-    pension_collector = models.ForeignKey(PensionCollector, related_name='pension_collector', on_delete=models.CASCADE, blank=True,null=True)
+    schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True, null=True)
+    pension_collector = models.ForeignKey(PensionCollector, related_name='staff', on_delete=models.CASCADE, blank=True,null=True)
     _id = models.CharField(default= "", max_length=500, blank=True, null=True)
-    salaryAmount = models.FloatField(default=0, blank=True)
-    grossIncome = models.FloatField(default=0, blank=True)
-    nhis = models.FloatField(default=0, blank=True)
-    allowanceforHeads = models.FloatField(default=0, blank=True)
+    salaryAmount = models.FloatField(default=0, blank=True, null=True)
+    grossIncome = models.FloatField(default=0, blank=True, null=True)
+    nhis = models.FloatField(default=0, blank=True, null=True)
+    allowanceforHeads = models.FloatField(default=0, blank=True, null=True)
     isCurrentStaff = models.BooleanField(default=True, null=True, blank=True)
-    tax = models.FloatField(default=0, blank=True)
+    tax = models.FloatField(default=0, blank=True, null=True)
     isAccountsStaff = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):

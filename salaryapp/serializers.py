@@ -110,9 +110,9 @@ class BankAccountSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 class StaffSerializer(WritableNestedModelSerializer):
-  schoolBranch = SchoolBranchSerializer()
-  pension_collector = PensionCollectorSerializer()
-  bankAccount  = BankAccountSerializer(many=True)
+  schoolBranch = SchoolBranchSerializer(required=False)
+  pension_collector = PensionCollectorSerializer(required=False)
+  bankAccount  = BankAccountSerializer(many=True, required=False)
   class Meta:
     model = models.Staff
     fields = '__all__'
