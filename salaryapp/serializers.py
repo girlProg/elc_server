@@ -104,10 +104,11 @@ class BankSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 class BankAccountSerializer(serializers.ModelSerializer):
-  bank = BankSerializer(read_only=True)
+  bank = BankSerializer()
   class Meta:
     model = models.BankAccount
     fields = '__all__'
+
 
 class StaffSerializer(WritableNestedModelSerializer):
   schoolBranch = SchoolBranchSerializer(required=False)

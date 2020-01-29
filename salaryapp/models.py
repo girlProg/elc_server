@@ -69,14 +69,14 @@ class BankAccount(ParentModel):
 
 class PaySlip(ParentModel):
     staff = models.ForeignKey(Staff, related_name='payslip', on_delete=models.CASCADE)
-    tax = models.FloatField(default=0, blank=True)
+    tax = models.FloatField(default=0, blank=True, null=True)
     month = models.CharField(max_length=500, blank=True, null=True, default=str(datetime.now().month))
     year = models.CharField(max_length=500, blank=True, null=True, default=str(datetime.now().year))
-    credittobank = models.FloatField(default=0, blank=True)
-    salaryAmount = models.FloatField(default=0, blank=True)
-    grossIncome = models.FloatField(default=0, blank=True)
-    nhis = models.FloatField(default=0, blank=True)
-    allowanceforHeads = models.FloatField(default=0, blank=True)
+    credittobank = models.FloatField(default=0, blank=True, null=True)
+    salaryAmount = models.FloatField(default=0, blank=True, null=True)
+    grossIncome = models.FloatField(default=0, blank=True, null=True)
+    nhis = models.FloatField(default=0, blank=True, null=True)
+    allowanceforHeads = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
         return self.month + ' - '  + self.year + ' ' + self.staff.name
@@ -99,8 +99,19 @@ class PaySlip(ParentModel):
 
 
 
-def save_salary(sender, instance, **kwargs):
+def save_payslip(sender, instance, **kwargs):
     #save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
+
+    # if not instance.salaryAmount:
+    # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
+    instance.salaryAmount = instance.staff.salaryAmount
+    instance.tax = instance.staff.tax
+    instance.nhis = instance.staff.nhis
+    instance.allowanceforHeads = instance.staff.allowanceforHeads
+    post_save.disconnect(save_payslip, sender=PaySlip)
+    instance.save()
+    post_save.connect(save_payslip, sender=PaySlip)
+
     allowance, created = SBasic.objects.get_or_create(salary=instance)
     allowance.save() if not created else None
     allowance, created = SHousing.objects.get_or_create(salary=instance)
@@ -124,15 +135,17 @@ def save_salary(sender, instance, **kwargs):
 
     instance.grossIncome = instance.addall() + instance.allowanceforHeads
 
+
     ''' commented out because we are now using variable adjustments instead of predefined
     ones like tahfeez, Quran, school shop etc'''
-    post_save.disconnect(save_salary, sender=PaySlip)
+    post_save.disconnect(save_payslip, sender=PaySlip)
+    instance.credittobank = instance.grossIncome - instance.pension.all()[0].amount - instance.nhis - instance.tax
     instance.save()
-    instance.credittobank = instance
-    # Negatives.objects.get_or_create(salary=instance)
-    post_save.connect(save_salary, sender=PaySlip)
 
-post_save.connect(save_salary, sender=PaySlip)
+    # Negatives.objects.get_or_create(salary=instance)
+    post_save.connect(save_payslip, sender=PaySlip)
+
+post_save.connect(save_payslip, sender=PaySlip)
 
 
 
@@ -300,9 +313,9 @@ def update_salary(sender, instance, **kwargs):
     x = instance.salary
     # x.credittobank = (x.grossIncome - x.pension.first().amount - x.nhis - x.tax) + instance.pos_total - instance.neg_total
     x.credittobank = (x.grossIncome - x.pension.first().amount - x.nhis - x.tax) + instance.pos_total - instance.neg_total
-    post_save.disconnect(save_salary, sender=PaySlip)
+    post_save.disconnect(save_payslip, sender=PaySlip)
     x.save()
-    post_save.connect(save_salary, sender=PaySlip)
+    post_save.connect(save_payslip, sender=PaySlip)
 
 
     # if sender._meta.object_name == 'Positives':
@@ -338,8 +351,8 @@ def update_payslip(sender, instance, **kwargs):
         payslip.credittobank = (payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) + instance.amount
     else:
         payslip.credittobank = (payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) - instance.amount
-    post_save.disconnect(save_salary, sender=PaySlip)
+    post_save.disconnect(save_payslip, sender=PaySlip)
     payslip.save()
-    post_save.connect(save_salary, sender=PaySlip)
+    post_save.connect(save_payslip, sender=PaySlip)
 
 post_save.connect(update_payslip, sender=VariableAdjustment)

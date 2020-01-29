@@ -105,8 +105,8 @@ class VariableAdjustmentViewSet(viewsets.ModelViewSet):
 
 class BankViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
-    serializer_class = serializers.BankAccountSerializer
-    queryset = models.BankAccount.objects.all()
+    serializer_class = serializers.BankSerializer
+    queryset = models.Bank.objects.all()
 
 class BankAccountViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
