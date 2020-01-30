@@ -151,14 +151,18 @@ def create_payslip(sender, instance, **kwargs):
     # if not instance.salaryAmount:
     # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
 
-    PaySlip.objects.get_or_create(salaryAmount=instance.salaryAmount,
-                                  nhis=instance.nhis,
-                                  allowanceforHeads=instance.allowanceforHeads,
-                                  tax=instance.tax,
-                                  month=str(datetime.now().month),
-                                  year=str(datetime.now().year),
-                                  staff=instance
-                                  )
+    obj, created = PaySlip.objects.get_or_create(
+                                month=str(datetime.now().month),
+                                year=str(datetime.now().year),
+                                staff=instance
+                            )
+    if created:
+        obj.salaryAmount = instance.salaryAmount
+        obj.nhis = instance.nhis
+        obj.allowanceforHeads = instance.allowanceforHeads
+        obj.tax = instance.tax
+        obj.save()
+
     #
     # instance.salaryAmount = instance.staff.salaryAmount
     # instance.tax = instance.staff.tax
