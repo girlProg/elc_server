@@ -154,8 +154,8 @@ def create_payslip(sender, instance, **kwargs):
                            nhis=instance.nhis,
                            allowanceforHeads=instance.allowanceforHeads,
                            tax=instance.tax,
-                           month=str(datetime.month),
-                           year=str(datetime.year),
+                           month=str(datetime.now().month),
+                           year=str(datetime.now().year),
                            staff=instance
                            )
     #
