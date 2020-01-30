@@ -145,7 +145,65 @@ def save_payslip(sender, instance, **kwargs):
     # Negatives.objects.get_or_create(salary=instance)
     post_save.connect(save_payslip, sender=PaySlip)
 
+def create_payslip(sender, instance, **kwargs):
+    #save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
+
+    # if not instance.salaryAmount:
+    # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
+    PaySlip.objects.create(salaryAmount=instance.salaryAmount,
+                           nhis=instance.nhis,
+                           allowanceforHeads=instance.allowanceforHeads,
+                           tax=instance.tax,
+                           month=datetime.month,
+                           year=datetime.year,
+                           staff=instance
+                           )
+    #
+    # instance.salaryAmount = instance.staff.salaryAmount
+    # instance.tax = instance.staff.tax
+    # instance.nhis = instance.staff.nhis
+    # instance.allowanceforHeads = instance.staff.allowanceforHeads
+    # post_save.disconnect(save_payslip, sender=PaySlip)
+    # instance.save()
+    # post_save.connect(save_payslip, sender=PaySlip)
+    #
+    # allowance, created = SBasic.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SHousing.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = STransport.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SMeal.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SUtility.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SEntertainment.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SDressing.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SEducation.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = SDomestic.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    # allowance, created = Pension.objects.get_or_create(salary=instance)
+    # allowance.save() if not created else None
+    #
+    # instance.grossIncome = instance.addall() + instance.allowanceforHeads
+    #
+    #
+    # ''' commented out because we are now using variable adjustments instead of predefined
+    # ones like tahfeez, Quran, school shop etc'''
+    # post_save.disconnect(save_payslip, sender=PaySlip)
+    # instance.credittobank = instance.grossIncome - instance.pension.all()[0].amount - instance.nhis - instance.tax
+    # instance.save()
+    #
+    # # Negatives.objects.get_or_create(salary=instance)
+    # post_save.connect(save_payslip, sender=PaySlip)
+
+
 post_save.connect(save_payslip, sender=PaySlip)
+
+post_save.connect(create_payslip, sender=Staff)
 
 
 
