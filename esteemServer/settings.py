@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'salaryapp',
-    'coreapi'
+    'coreapi',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
