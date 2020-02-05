@@ -64,25 +64,11 @@ class PositivesSerializer(serializers.ModelSerializer):
 
 
 class NegativesSerializer(serializers.ModelSerializer):
+  # staff = StaffSerializer()
   class Meta:
     model = models.Negatives
     fields = '__all__'
 
-class PaySlipSerializer(serializers.ModelSerializer):
-  basic = SBasicSerializer(required=False, many=True)
-  housing = SHousingSerializer(required=False, many=True)
-  transport = STransportSerializer(required=False, many=True)
-  meal = SMealSerializer(required=False, many=True)
-  utility = SUtilitySerializer(required=False, many=True)
-  entertainment = SEntertainmentSerializer(required=False, many=True)
-  education = SEducationSerializer(required=False, many=True)
-  dressing = SDressingSerializer(required=False, many=True)
-  domestic = SDomesticSerializer(required=False, many=True)
-  pension = PensionSerializer(required=False, many=True)
-  class Meta:
-    model = models.PaySlip
-    fields = '__all__'
-    # fields = ('id','month', 'year', 'date', 'credittobank' ,'tax', 'basic', 'housing', 'transport', 'meal', 'utility', 'entertainment', 'dressing', 'education', 'domestic', 'pension', )
 
   def create(self, validated_data):
         return models.PaySlip.objects.create(**validated_data)
@@ -103,7 +89,7 @@ class BankSerializer(serializers.ModelSerializer):
     model = models.Bank
     fields = '__all__'
 
-class BankAccountSerializer(serializers.ModelSerializer):
+class BankAccountSerializer(WritableNestedModelSerializer):
   bank = BankSerializer()
   class Meta:
     model = models.BankAccount
@@ -119,15 +105,23 @@ class StaffSerializer(WritableNestedModelSerializer):
     fields = '__all__'
     # fields = ('id', 'name', 'allowanceforHeads', 'salaryAmount', 'grossIncome', 'nhis', 'isCurrentStaff')
 
-  # def update(self, instance, validated_data):
-  #   instance.pension_collector = validated_data.get('pension_collector', instance.email)
-  #   instance.name = validated_data.get('content', instance.name)
-  #   return instance
-  #
-  #
-  # def create(self, validated_data):
-  #   pen = models.PensionCollector.objects.create(validated_data.get('pension_collector'))
-  #   return models.Staff.objects.create(**validated_data)
+class PaySlipSerializer(serializers.ModelSerializer):
+  basic = SBasicSerializer(required=False, many=True)
+  housing = SHousingSerializer(required=False, many=True)
+  transport = STransportSerializer(required=False, many=True)
+  meal = SMealSerializer(required=False, many=True)
+  utility = SUtilitySerializer(required=False, many=True)
+  entertainment = SEntertainmentSerializer(required=False, many=True)
+  education = SEducationSerializer(required=False, many=True)
+  dressing = SDressingSerializer(required=False, many=True)
+  domestic = SDomesticSerializer(required=False, many=True)
+  pension = PensionSerializer(required=False, many=True)
+  staff = StaffSerializer()
+  class Meta:
+    model = models.PaySlip
+    fields = '__all__'
+    # fields = ('id','month', 'year', 'date', 'credittobank' ,'tax', 'basic', 'housing', 'transport', 'meal', 'utility', 'entertainment', 'dressing', 'education', 'domestic', 'pension', )
+
 
 class VariableAdjustmentSerializer(serializers.ModelSerializer):
   class Meta:

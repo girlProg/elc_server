@@ -12,6 +12,8 @@ django-rest-framework = "*"
 djoser = "*"
 django-cors-headers = "*"
 psycopg2-binary = "*"
+rollbar = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.7"

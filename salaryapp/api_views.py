@@ -1,29 +1,14 @@
 from . import serializers, models
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-
+from django_filters.rest_framework import DjangoFilterBackend
 
 class StaffViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.StaffSerializer
     queryset = models.Staff.objects.all()
 
-    # def create(self, request, *args, **kwargs):
-    #     print(request.method)
-    #     try:
-    #         if len(list(request.data)) > 1:
-    #             obj = models.Staff.objects.get(id=request.data['id'])
-    #             inst = serializers.StaffSerializer(data=request.data)
-    #             if inst.is_valid():
-    #                 inst.save()
-    #             print(obj)
-    #             print(inst)
-    #             return Response(inst)
-    #     except Exception as e:
-    #         # rollbar.report_exc_info(extra_data={'error': e, 'message': e, 'user': request.data })
-    #         return Response({'error': 'Error changing password: ' + str(e)}, status=409)
-    #
-    #
+
     # def update(self, request, *args, **kwargs):
     #     print(request.method)
     #     try:
@@ -45,6 +30,7 @@ class PaySlipViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.PaySlipSerializer
     queryset = models.PaySlip.objects.all()
+    filter_fields = ('month', 'year', )
 
 
 class SBasicViewSet(viewsets.ModelViewSet):

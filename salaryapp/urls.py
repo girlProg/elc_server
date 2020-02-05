@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 
 router = routers.DefaultRouter()
-router.register('staff', api_views.StaffViewSet, 'staff')
+router.register('staff', api_views.StaffViewSet, 'staff',)
 router.register('payslip', api_views.PaySlipViewSet, 'basic')
 router.register('pfas', api_views.PensionCollectorViewSet, 'pfas')
 router.register('bank', api_views.BankViewSet, 'bank')
