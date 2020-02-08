@@ -11,6 +11,7 @@ router.register('payslip', api_views.PaySlipViewSet, 'basic')
 router.register('pfas', api_views.PensionCollectorViewSet, 'pfas')
 router.register('bank', api_views.BankViewSet, 'bank')
 router.register('bankaccount', api_views.BankAccountViewSet, 'bankaccount')
+router.register('schoolbranch', api_views.SchoolBranchViewSet, 'schoolbranch')
 
 
 urlpatterns = router.urls

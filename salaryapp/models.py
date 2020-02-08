@@ -2,44 +2,46 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from datetime import datetime
+from .taxCalculator import calculate_monthly_tax
 
-
-
-VariableAdjustment_CHOOSE=(('Positive','Positive'),('Negative','Negative'))
+VariableAdjustment_CHOOSE = (('Positive', 'Positive'), ('Negative', 'Negative'))
 
 
 class ParentModel(models.Model):
-    created=models.DateTimeField(auto_now_add=True,null=True)
-    modified=models.DateTimeField(auto_now=True,null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    modified = models.DateTimeField(auto_now=True, null=True)
+
     class Meta:
-        abstract=True
+        abstract = True
         ordering = ['-modified']
 
 
 class SchoolBranch(ParentModel):
-    name = models.CharField(default= "", max_length=500, blank=True, null=True)
-    address = models.CharField(default= "", max_length=500, blank=True, null=True)
-    pensionID = models.CharField(default= "", max_length=500, blank=True, null=True)
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    address = models.CharField(default="", max_length=500, blank=True, null=True)
+    pensionID = models.CharField(default="", max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
 class PensionCollector(ParentModel):
-    name = models.CharField(default= "", max_length=500, blank=True, null=True)
-    address = models.CharField(default= "", max_length=500, blank=True, null=True)
-    pensionID = models.CharField(default= "", max_length=500, blank=True, null=True)
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    address = models.CharField(default="", max_length=500, blank=True, null=True)
+    pensionID = models.CharField(default="", max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
 class Staff(ParentModel):
-    name = models.CharField(default= "", max_length=500, blank=True, null=True)
-    pension_code = models.CharField(default= "", max_length=500, blank=True, null=True)
-    schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True, null=True)
-    pension_collector = models.ForeignKey(PensionCollector, related_name='staff', on_delete=models.CASCADE, blank=True,null=True)
-    _id = models.CharField(default= "", max_length=500, blank=True, null=True)
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    pension_code = models.CharField(default="", max_length=500, blank=True, null=True)
+    schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True,
+                                     null=True)
+    pension_collector = models.ForeignKey(PensionCollector, related_name='staff', on_delete=models.CASCADE, blank=True,
+                                          null=True)
+    _id = models.CharField(default="", max_length=500, blank=True, null=True)
     salaryAmount = models.FloatField(default=0, blank=True, null=True)
     grossIncome = models.FloatField(default=0, blank=True, null=True)
     nhis = models.FloatField(default=0, blank=True, null=True)
@@ -51,11 +53,13 @@ class Staff(ParentModel):
     def __str__(self):
         return self.name
 
+
 class Bank(ParentModel):
-    name = models.CharField(blank=True,default='', max_length=500)
+    name = models.CharField(blank=True, default='', max_length=500)
 
     def __str__(self):
         return self.name
+
 
 class BankAccount(ParentModel):
     number = models.CharField(blank=True, max_length=11, null=True)
@@ -79,28 +83,25 @@ class PaySlip(ParentModel):
     allowanceforHeads = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
-        return self.month + ' - '  + self.year + ' ' + self.staff.name
-
+        return self.month + ' - ' + self.year + ' ' + self.staff.name
 
     class Meta:
         unique_together = ("staff", 'month', 'year')
 
-
     def addall(self):
         # return 2
-        return self.basic.all()[0].amount + self.housing.all()[0].amount +\
+        return self.basic.all()[0].amount + self.housing.all()[0].amount + \
                self.transport.all()[0].amount + self.meal.all()[0].amount + \
-               self.utility.all()[0].amount + self.entertainment.all()[0].amount +\
-               self.dressing.all()[0].amount + self.education.all()[0].amount +\
+               self.utility.all()[0].amount + self.entertainment.all()[0].amount + \
+               self.dressing.all()[0].amount + self.education.all()[0].amount + \
                self.domestic.all()[0].amount
 
     def __str__(self):
         return self.staff.name
 
 
-
 def save_payslip(sender, instance, **kwargs):
-    #save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
+    # save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
 
     # if not instance.salaryAmount:
     # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
@@ -135,33 +136,58 @@ def save_payslip(sender, instance, **kwargs):
 
     instance.grossIncome = instance.addall() + instance.allowanceforHeads
 
-
     ''' commented out because we are now using variable adjustments instead of predefined
     ones like tahfeez, Quran, school shop etc'''
     post_save.disconnect(save_payslip, sender=PaySlip)
+    tax = calculate_monthly_tax(instance.grossIncome, 200000, 20, instance.pension.all()[0].amount, instance.nhis)
+    print(tax)
+    instance.tax = tax
+
+    post_save.disconnect(create_payslip, sender=Staff)
+    instance.staff.tax = tax
+    instance.save()
+    post_save.connect(create_payslip, sender=Staff)
+
     instance.credittobank = instance.grossIncome - instance.pension.all()[0].amount - instance.nhis - instance.tax
     instance.save()
 
     # Negatives.objects.get_or_create(salary=instance)
     post_save.connect(save_payslip, sender=PaySlip)
 
+
 def create_payslip(sender, instance, **kwargs):
-    #save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
+    # save the object again incase the salary amount changed this is not best for old payslips before a salary increment. will need to make them immutable
 
     # if not instance.salaryAmount:
     # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
 
-    obj, created = PaySlip.objects.get_or_create(
-                                month=str(datetime.now().month),
-                                year=str(datetime.now().year),
-                                staff=instance
-                            )
-    if created:
-        obj.salaryAmount = instance.salaryAmount
-        obj.nhis = instance.nhis
-        obj.allowanceforHeads = instance.allowanceforHeads
-        obj.tax = instance.tax
-        obj.save()
+    payslip, created = PaySlip.objects.get_or_create(
+        month=str(datetime.now().month),
+        year=str(datetime.now().year),
+        staff=instance
+    )
+    # if not created:
+    #     obj.salaryAmount = instance.salaryAmount
+    #     obj.nhis = instance.nhis
+    #     obj.allowanceforHeads = instance.allowanceforHeads
+    #     obj.tax = instance.tax
+    #     obj.save()
+
+    # TODO: create new object where consolidated relief and percentage annual are objects
+    # tax = calculate_monthly_tax(obj.staff.grossIncome, 200000, 20, obj.pension.all()[0].amount, instance.nhis )
+    # print(tax)
+    # instance.tax = tax
+    # post_save.disconnect(create_payslip, sender=Staff)
+    # instance.save()
+    # post_save.connect(create_payslip, sender=Staff)
+
+
+    if not created:
+        payslip.salaryAmount = instance.salaryAmount
+        payslip.nhis = instance.nhis
+        payslip.allowanceforHeads = instance.allowanceforHeads
+        payslip.tax = instance.tax
+        payslip.save()
 
     #
     # instance.salaryAmount = instance.staff.salaryAmount
@@ -210,6 +236,14 @@ post_save.connect(save_payslip, sender=PaySlip)
 
 post_save.connect(create_payslip, sender=Staff)
 
+''' 
+when saving a staff object for the first time, 
+    * a payslip is auto generated after saving the staff
+    
+when saving an existing staff
+    * the payslip needs to be updated to have the new staff values
+
+'''
 
 
 class SBasic(ParentModel):
@@ -218,13 +252,12 @@ class SBasic(ParentModel):
     salary = models.ForeignKey(PaySlip, null=True, blank=True, related_name='basic', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        #super(self.__class__,self).save(*args,**kwargs)
+        # super(self.__class__,self).save(*args,**kwargs)
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.amount)
-
 
 
 class SHousing(ParentModel):
@@ -234,7 +267,7 @@ class SHousing(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class STransport(ParentModel):
@@ -244,18 +277,17 @@ class STransport(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
-
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SMeal(ParentModel):
     constant = models.FloatField(default=0.1, blank=True)
     amount = models.FloatField(default=0, blank=True)
-    salary = models.ForeignKey(PaySlip,null=True, blank=True, related_name='meal', on_delete=models.CASCADE)
+    salary = models.ForeignKey(PaySlip, null=True, blank=True, related_name='meal', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SUtility(ParentModel):
@@ -265,7 +297,7 @@ class SUtility(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SEntertainment(ParentModel):
@@ -275,8 +307,7 @@ class SEntertainment(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
-
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SDressing(ParentModel):
@@ -286,8 +317,7 @@ class SDressing(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
-
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SEducation(ParentModel):
@@ -297,8 +327,7 @@ class SEducation(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
-
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class SDomestic(ParentModel):
@@ -308,24 +337,26 @@ class SDomestic(ParentModel):
 
     def save(self, *args, **kwargs):
         self.amount = self.constant * self.salary.salaryAmount
-        super(self.__class__,self).save(*args,**kwargs)
-
-
-
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class Pension(ParentModel):
     constant = models.FloatField(default=0.075, blank=True)
     amount = models.FloatField(default=0, blank=True)
-    salary = models.ForeignKey(PaySlip,null=True, blank=True, related_name='pension', on_delete=models.CASCADE)
+    salary = models.ForeignKey(PaySlip, null=True, blank=True, related_name='pension', on_delete=models.CASCADE)
+
 
 def save_pension(sender, instance, **kwargs):
     post_save.disconnect(save_pension, sender=Pension)
-    instance.amount = instance.constant * (instance.salary.basic.all()[0].amount + instance.salary.housing.all()[0].amount + instance.salary.transport.all()[0].amount)
+    instance.amount = instance.constant * (
+                instance.salary.basic.all()[0].amount + instance.salary.housing.all()[0].amount +
+                instance.salary.transport.all()[0].amount)
     instance.save()
     post_save.connect(save_pension, sender=Pension)
 
+
 post_save.connect(save_pension, sender=Pension)
+
 
 class Negatives(ParentModel):
     neg_schoolshop = models.FloatField(default=0, blank=True)
@@ -338,28 +369,30 @@ class Negatives(ParentModel):
 
     neg_total = models.FloatField(default=0, blank=True)
     pos_total = models.FloatField(default=0, blank=True)
-    salary = models.ForeignKey(PaySlip, null=True, blank=True,related_name='negatives', on_delete=models.CASCADE)
+    salary = models.ForeignKey(PaySlip, null=True, blank=True, related_name='negatives', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        self.neg_total = self.neg_schoolshop + self.neg_schoolfeesadvloan+ self.neg_deduction + self.neg_feeding
+        self.neg_total = self.neg_schoolshop + self.neg_schoolfeesadvloan + self.neg_deduction + self.neg_feeding
         self.pos_total = self.pos_refund + self.pos_tahfeez
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
+
 
 class Positives(ParentModel):
     refund = models.FloatField(default=0, blank=True)
     tahfeez = models.FloatField(default=0, blank=True)
     total = models.FloatField(default=0, blank=True)
-    salary = models.ForeignKey(PaySlip,  null=True, blank=True, related_name='positives', on_delete=models.CASCADE)
+    salary = models.ForeignKey(PaySlip, null=True, blank=True, related_name='positives', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.total = self.refund + self.tahfeez
-        super(self.__class__,self).save(*args,**kwargs)
+        super(self.__class__, self).save(*args, **kwargs)
+
 
 class VariableAdjustment(ParentModel):
-    name = models.CharField(default= "", max_length=500, blank=True, null=True)
-    type = models.CharField(default= "", max_length=500, blank=True, null=True, choices=VariableAdjustment_CHOOSE,)
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    type = models.CharField(default="", max_length=500, blank=True, null=True, choices=VariableAdjustment_CHOOSE, )
     amount = models.FloatField(default=0, blank=True)
-    payslip = models.ForeignKey(PaySlip,  null=True, blank=True, related_name='varadj', on_delete=models.CASCADE)
+    payslip = models.ForeignKey(PaySlip, null=True, blank=True, related_name='varadj', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name + ' ' + self.type
@@ -369,17 +402,16 @@ class VariableAdjustment(ParentModel):
     #     super(self.__class__,self).save(*args,**kwargs)
 
 
-
 def update_salary(sender, instance, **kwargs):
-    #TODO: currently does not detect when a partner has not
+    # TODO: currently does not detect when a partner has not
 
     x = instance.salary
     # x.credittobank = (x.grossIncome - x.pension.first().amount - x.nhis - x.tax) + instance.pos_total - instance.neg_total
-    x.credittobank = (x.grossIncome - x.pension.first().amount - x.nhis - x.tax) + instance.pos_total - instance.neg_total
+    x.credittobank = (
+                                 x.grossIncome - x.pension.first().amount - x.nhis - x.tax) + instance.pos_total - instance.neg_total
     post_save.disconnect(save_payslip, sender=PaySlip)
     x.save()
     post_save.connect(save_payslip, sender=PaySlip)
-
 
     # if sender._meta.object_name == 'Positives':
     #     if not x.credittobank:
@@ -403,19 +435,22 @@ def update_salary(sender, instance, **kwargs):
     # instance.save()
     # post_save.connect(save_staff, sender=Staff)
 
+
 # post_save.connect(update_staff, sender=Positives)
 post_save.connect(update_salary, sender=Negatives)
-
 
 
 def update_payslip(sender, instance, **kwargs):
     payslip = instance.payslip
     if instance.type == 'Positive':
-        payslip.credittobank = (payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) + instance.amount
+        payslip.credittobank = (
+                                           payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) + instance.amount
     else:
-        payslip.credittobank = (payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) - instance.amount
+        payslip.credittobank = (
+                                           payslip.grossIncome - payslip.pension.first().amount - payslip.nhis - payslip.tax) - instance.amount
     post_save.disconnect(save_payslip, sender=PaySlip)
     payslip.save()
     post_save.connect(save_payslip, sender=PaySlip)
+
 
 post_save.connect(update_payslip, sender=VariableAdjustment)

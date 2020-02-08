@@ -98,3 +98,8 @@ class BankAccountViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.BankAccountSerializer
     queryset = models.BankAccount.objects.all()
+
+class SchoolBranchViewSet(viewsets.ModelViewSet):
+    # permission_classes = [ permissions.IsAuthenticated, ]
+    serializer_class = serializers.SchoolBranchSerializer
+    queryset = models.SchoolBranch.objects.all()

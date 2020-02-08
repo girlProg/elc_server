@@ -94,6 +94,7 @@ class BankAccountSerializer(WritableNestedModelSerializer):
   class Meta:
     model = models.BankAccount
     fields = '__all__'
+    # exclude = ['created', 'modified']
 
 
 class StaffSerializer(WritableNestedModelSerializer):
