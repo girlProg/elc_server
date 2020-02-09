@@ -74,30 +74,42 @@ class SDomesticViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SDomesticSerializer
     queryset = models.SDomestic.objects.all()
 
+
 class PensionViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.PensionSerializer
     queryset = models.Pension.objects.all()
+
 
 class PensionCollectorViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.PensionCollectorSerializer
     queryset = models.PensionCollector.objects.all()
 
+
+class VariableAdjustmentTypeViewSet(viewsets.ModelViewSet):
+    # permission_classes = [ permissions.IsAuthenticated, ]
+    serializer_class = serializers.VariableAdjustmentTypeSerializer
+    queryset = models.VariableAdjustmentType.objects.all()
+
+
 class VariableAdjustmentViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.VariableAdjustmentSerializer
     queryset = models.VariableAdjustment.objects.all()
+
 
 class BankViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.BankSerializer
     queryset = models.Bank.objects.all()
 
+
 class BankAccountViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.BankAccountSerializer
     queryset = models.BankAccount.objects.all()
+
 
 class SchoolBranchViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]

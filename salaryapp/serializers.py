@@ -57,23 +57,6 @@ class PensionSerializer(serializers.ModelSerializer):
     fields = ('amount', 'constant')
 
 
-class PositivesSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = models.Positives
-    fields = '__all__'
-
-
-class NegativesSerializer(serializers.ModelSerializer):
-  # staff = StaffSerializer()
-  class Meta:
-    model = models.Negatives
-    fields = '__all__'
-
-
-  def create(self, validated_data):
-        return models.PaySlip.objects.create(**validated_data)
-
-
 class SchoolBranchSerializer(serializers.ModelSerializer):
   class Meta:
     model = models.SchoolBranch
@@ -124,7 +107,14 @@ class PaySlipSerializer(serializers.ModelSerializer):
     # fields = ('id','month', 'year', 'date', 'credittobank' ,'tax', 'basic', 'housing', 'transport', 'meal', 'utility', 'entertainment', 'dressing', 'education', 'domestic', 'pension', )
 
 
+class VariableAdjustmentTypeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = models.VariableAdjustmentType
+    fields = '__all__'
+
+
 class VariableAdjustmentSerializer(serializers.ModelSerializer):
+  name = VariableAdjustmentTypeSerializer()
   class Meta:
     model = models.VariableAdjustment
     fields = '__all__'
