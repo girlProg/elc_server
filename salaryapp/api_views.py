@@ -32,6 +32,11 @@ class PaySlipViewSet(viewsets.ModelViewSet):
     queryset = models.PaySlip.objects.all()
     filter_fields = ('month', 'year', )
 
+    def create(self, request, *args, **kwargs):
+        # cannot create payslips via API
+        # they are auto generated
+        pass
+
 
 class SBasicViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
@@ -97,7 +102,7 @@ class VariableAdjustmentViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.VariableAdjustmentSerializer
     queryset = models.VariableAdjustment.objects.all()
-
+    filter_fields = ('payslip__month', 'payslip__year',)
 
 class BankViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
@@ -115,3 +120,4 @@ class SchoolBranchViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.SchoolBranchSerializer
     queryset = models.SchoolBranch.objects.all()
+

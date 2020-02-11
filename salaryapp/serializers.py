@@ -113,9 +113,9 @@ class VariableAdjustmentTypeSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 
-class VariableAdjustmentSerializer(serializers.ModelSerializer):
+class VariableAdjustmentSerializer(WritableNestedModelSerializer):
   name = VariableAdjustmentTypeSerializer()
-  payslip = PaySlipSerializer()
+  # payslip = PaySlipSerializer()
   class Meta:
     model = models.VariableAdjustment
     fields = '__all__'

@@ -40,6 +40,13 @@ class APIPOSTRequestsCreationTests(APITestCase):
         self.assertEqual(Bank.objects.count(), 1)
         self.assertEqual(Bank.objects.get().name, 'GTBank')
 
+    def test_create_varadj(self):
+        data = {'name': 'GTBank'}
+        response = self.client.post('/api/bank/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Bank.objects.count(), 1)
+        self.assertEqual(Bank.objects.get().name, 'GTBank')
+
 
 
 class NewStaffTestCase(TestCase):
