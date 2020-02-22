@@ -17,6 +17,10 @@ class ParentModel(models.Model):
         abstract = True
         ordering = ['-modified']
 
+class Profile(User, ParentModel):
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    pass
+
 
 class SchoolBranch(ParentModel):
     name = models.CharField(default="", max_length=500, blank=True, null=True)
@@ -38,7 +42,7 @@ class PensionCollector(ParentModel):
 
 class Staff(ParentModel):
     name = models.CharField(default="", max_length=500, blank=True, null=True)
-    pension_code = models.CharField(default="", max_length=500, blank=True, null=True)
+    # pension_code = models.CharField(default="", max_length=500, blank=True, null=True)
     schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True,
                                      null=True)
     pension_collector = models.ForeignKey(PensionCollector, related_name='staff', on_delete=models.CASCADE, blank=True,
@@ -51,6 +55,7 @@ class Staff(ParentModel):
     isCurrentStaff = models.BooleanField(default=True, null=True, blank=True)
     tax = models.DecimalField(default=0, max_digits=10, decimal_places=2, blank=True, null=True)
     isAccountsStaff = models.BooleanField(default=False, blank=True, null=True)
+    is_pensioner = models.BooleanField(default=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -94,9 +99,9 @@ class PaySlip(ParentModel):
         # return 2
         return self.basic.all()[0].amount + self.housing.all()[0].amount + \
                self.transport.all()[0].amount + self.meal.all()[0].amount + \
-               self.utility.all()[0].amount + self.entertainment.all()[0].amount + \
+               self.utility.all()[0].amount +  \
                self.dressing.all()[0].amount + self.education.all()[0].amount + \
-               self.domestic.all()[0].amount
+               self.medical.all()[0].amount
 
     def __str__(self):
         return self.staff.name
@@ -125,13 +130,11 @@ def save_payslip(sender, instance, **kwargs):
     allowance.save() if not created else None
     allowance, created = SUtility.objects.get_or_create(payslip=instance)
     allowance.save() if not created else None
-    allowance, created = SEntertainment.objects.get_or_create(payslip=instance)
+    allowance, created = SMedical.objects.get_or_create(payslip=instance)
     allowance.save() if not created else None
     allowance, created = SDressing.objects.get_or_create(payslip=instance)
     allowance.save() if not created else None
     allowance, created = SEducation.objects.get_or_create(payslip=instance)
-    allowance.save() if not created else None
-    allowance, created = SDomestic.objects.get_or_create(payslip=instance)
     allowance.save() if not created else None
     allowance, created = Pension.objects.get_or_create(payslip=instance)
     allowance.save() if not created else None
@@ -249,7 +252,7 @@ class SMeal(ParentModel):
 
 
 class SUtility(ParentModel):
-    constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.075), blank=True)
+    constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.1), blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
     payslip = models.ForeignKey(PaySlip, null=True, blank=True, related_name='utility', on_delete=models.CASCADE)
 
@@ -257,7 +260,7 @@ class SUtility(ParentModel):
         self.amount = self.constant * self.payslip.salaryAmount
         super(self.__class__, self).save(*args, **kwargs)
 
-
+# to be swapped with medical
 class SEntertainment(ParentModel):
     constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.05), blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
@@ -268,8 +271,18 @@ class SEntertainment(ParentModel):
         super(self.__class__, self).save(*args, **kwargs)
 
 
+class SMedical(ParentModel):
+    constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.05), blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
+    payslip = models.ForeignKey(PaySlip, null=True, blank=True, related_name='medical', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        self.amount = self.constant * self.payslip.salaryAmount
+        super(self.__class__, self).save(*args, **kwargs)
+
+
 class SDressing(ParentModel):
-    constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.075), blank=True)
+    constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.1), blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
     payslip = models.ForeignKey(PaySlip, null=True, blank=True, related_name='dressing', on_delete=models.CASCADE)
 
@@ -287,7 +300,7 @@ class SEducation(ParentModel):
         self.amount = self.constant * self.payslip.salaryAmount
         super(self.__class__, self).save(*args, **kwargs)
 
-
+# TODO: remove all references to domestic
 class SDomestic(ParentModel):
     constant = models.DecimalField(max_digits=10, decimal_places=5, default=Decimal.from_float(0.05), blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
@@ -306,9 +319,12 @@ class Pension(ParentModel):
 
 def save_pension(sender, instance, **kwargs):
     post_save.disconnect(save_pension, sender=Pension)
-    instance.amount = instance.constant * (
-                instance.payslip.basic.all()[0].amount + instance.payslip.housing.all()[0].amount +
-                instance.payslip.transport.all()[0].amount)
+    if instance.payslip.staff.is_pensioner:
+        instance.amount = instance.constant * (
+                    instance.payslip.basic.all()[0].amount + instance.payslip.housing.all()[0].amount +
+                    instance.payslip.transport.all()[0].amount)
+    else:
+        instance.amount = 0
     instance.save()
     post_save.connect(save_pension, sender=Pension)
 
