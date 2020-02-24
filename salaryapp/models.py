@@ -144,7 +144,10 @@ def save_payslip(sender, instance, **kwargs):
     ''' commented out because we are now using variable adjustments instead of predefined
     ones like tahfeez, Quran, school shop etc'''
     post_save.disconnect(save_payslip, sender=PaySlip)
-    tax = calculate_monthly_tax(instance.grossIncome, 200000, 20, instance.pension.all()[0].amount, instance.nhis)
+    if instance.staff.is_pensioner:
+        tax = calculate_monthly_tax(instance.grossIncome, 200000, 20, instance.pension.all()[0].amount, instance.nhis)
+    else:
+        tax = 0
     # print(tax)
     instance.tax = tax
 
@@ -153,7 +156,16 @@ def save_payslip(sender, instance, **kwargs):
     instance.save()
     post_save.connect(create_payslip, sender=Staff)
 
-    instance.credittobank = instance.grossIncome - instance.pension.all()[0].amount - instance.nhis - instance.tax
+    # add all var adjs to payslip
+    total = 0
+    for adj in instance.varadj.all():
+        if adj.type == 'Positive':
+            total += adj.amount
+        else:
+            total += -adj.amount
+    instance.credittobank = instance.grossIncome - instance.pension.all()[0].amount - instance.nhis - instance.tax + total
+    # print(instance.tax)
+    # print(instance.credittobank)
     instance.save()
 
     # Negatives.objects.get_or_create(salary=instance)
@@ -194,7 +206,6 @@ def create_payslip(sender, instance, **kwargs):
 
 
 post_save.connect(save_payslip, sender=PaySlip)
-
 post_save.connect(create_payslip, sender=Staff)
 
 ''' 
@@ -353,15 +364,23 @@ class VariableAdjustment(ParentModel):
 
 
 def update_payslip(sender, instance, **kwargs):
+    total = 0
     for adj in instance.payslip.varadj.all():
         if adj.type == 'Positive':
-            instance.payslip.credittobank = instance.payslip.credittobank + instance.amount
+            total += adj.amount
         else:
-            instance.payslip.credittobank = instance.payslip.credittobank + instance.amount
-
+            total += -adj.amount
+    instance.payslip.credittobank = instance.payslip.grossIncome - instance.payslip.pension.all()[0].amount - instance.payslip.nhis - instance.payslip.tax + total
+    # print(instance.tax)
+    # print(instance.credittobank)
     post_save.disconnect(save_payslip, sender=PaySlip)
     instance.payslip.save()
     post_save.connect(save_payslip, sender=PaySlip)
 
 
+
+
+
 post_save.connect(update_payslip, sender=VariableAdjustment)
+# post_save.connect(update_payslip_for_payslip_save, sender=PaySlip)
+

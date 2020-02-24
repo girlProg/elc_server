@@ -1,8 +1,9 @@
 from rest_framework import routers
-from . import api_views
-from django.conf.urls import  url
+from . import api_views, views
+from django.conf.urls import  url, include
 from esteemServer import settings
 from django.conf.urls.static import static
+
 
 
 router = routers.DefaultRouter()
@@ -16,7 +17,12 @@ router.register('varadjtype', api_views.VariableAdjustmentTypeViewSet, 'varadjty
 router.register('varadj', api_views.VariableAdjustmentViewSet, 'varadj')
 
 
-urlpatterns = router.urls
+# urlpatterns = router.urls
+
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^getstaff', views.convert_staff, name='convert_staff'),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

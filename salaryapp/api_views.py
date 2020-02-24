@@ -79,6 +79,11 @@ class SDomesticViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SDomesticSerializer
     queryset = models.SDomestic.objects.all()
 
+class SMedicalViewSet(viewsets.ModelViewSet):
+    # permission_classes = [ permissions.IsAuthenticated, ]
+    serializer_class = serializers.SMedicalSerializer
+    queryset = models.SMedical.objects.all()
+
 
 class PensionViewSet(viewsets.ModelViewSet):
     # permission_classes = [ permissions.IsAuthenticated, ]

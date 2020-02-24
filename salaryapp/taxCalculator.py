@@ -42,16 +42,26 @@ def calculate_monthly_tax(monthly_gross, crf, pa, monthly_pension, nhis):
         return (first_tax_constant_300 + second_tranche_calc)/Decimal.from_float(12)
 
     if 300000 < taxable_income < 1100000:
-        third_tranche_calc = Decimal.from_float(15 / 100) * (taxable_income - 500000)
+        third_tranche_calc = Decimal.from_float(15 / 100) * (taxable_income - 600000)
         return (first_tax_constant_300 + second_tax_constant_300 + third_tranche_calc) / Decimal.from_float(12)
 
     if 300000 < taxable_income < 1600000:
-        fourth_tranche_calc = Decimal.from_float(19 / 100) * (taxable_income - 500000)
-        return (first_tax_constant_300 + second_tax_constant_300 + third_tax_constant_500 + fourth_tranche_calc) / Decimal.from_float(12)
+        fourth_tranche_calc = Decimal.from_float(19 / 100) * (taxable_income - 1100000)
+        return (first_tax_constant_300 + second_tax_constant_300 +
+                third_tax_constant_500 + fourth_tranche_calc) / Decimal.from_float(12)
 
     if 300000 < taxable_income < 3200000:
         fifth_tranche_calc = Decimal.from_float(21 / 100) * (taxable_income - 1600000)
-        return (first_tax_constant_300 + second_tax_constant_300 + third_tax_constant_500 + fourth_tax_constant_500 + fifth_tranche_calc) / Decimal.from_float(12)
+        return (first_tax_constant_300 + second_tax_constant_300 + third_tax_constant_500
+                + fourth_tax_constant_500 + fifth_tranche_calc) / Decimal.from_float(12)
+
+    if 300000 < taxable_income > 3200000:
+        sixth_tranche_calc = Decimal.from_float(21 / 100) * (taxable_income - 3200000)
+        return (first_tax_constant_300 +
+                second_tax_constant_300 +
+                third_tax_constant_500 +
+                fourth_tax_constant_500 +
+                fifth_tax_constant_500) + sixth_tranche_calc + Decimal.from_float(12)
 
 
 

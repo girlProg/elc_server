@@ -51,6 +51,12 @@ class SDomesticSerializer(serializers.ModelSerializer):
     fields = ('amount', 'constant')
 
 
+class SMedicalSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = models.SMedical
+    fields = ('amount', 'constant')
+
+
 class PensionSerializer(serializers.ModelSerializer):
   class Meta:
     model = models.Pension
@@ -95,11 +101,12 @@ class PaySlipSerializer(serializers.ModelSerializer):
   transport = STransportSerializer(required=False, many=True)
   meal = SMealSerializer(required=False, many=True)
   utility = SUtilitySerializer(required=False, many=True)
-  entertainment = SEntertainmentSerializer(required=False, many=True)
+  # entertainment = SEntertainmentSerializer(required=False, many=True)
   education = SEducationSerializer(required=False, many=True)
   dressing = SDressingSerializer(required=False, many=True)
-  domestic = SDomesticSerializer(required=False, many=True)
+  # domestic = SDomesticSerializer(required=False, many=True)
   pension = PensionSerializer(required=False, many=True)
+  medical = PensionSerializer(required=False, many=True)
   staff = StaffSerializer()
   class Meta:
     model = models.PaySlip
