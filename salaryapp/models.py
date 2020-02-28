@@ -22,8 +22,17 @@ class Profile(User, ParentModel):
     pass
 
 
+class School(ParentModel):
+    name = models.CharField(default="", max_length=500, blank=True, null=True)
+    address = models.CharField(default="", max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class SchoolBranch(ParentModel):
     name = models.CharField(default="", max_length=500, blank=True, null=True)
+    school = models.ForeignKey(School, related_name='schoolbranch', on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(default="", max_length=500, blank=True, null=True)
     pensionID = models.CharField(default="", max_length=500, blank=True, null=True)
 
@@ -41,6 +50,7 @@ class PensionCollector(ParentModel):
 
 
 class Staff(ParentModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', null=True, blank=True)
     name = models.CharField(default="", max_length=500, blank=True, null=True)
     # pension_code = models.CharField(default="", max_length=500, blank=True, null=True)
     schoolBranch = models.ForeignKey(SchoolBranch, related_name='staff', on_delete=models.CASCADE, blank=True,

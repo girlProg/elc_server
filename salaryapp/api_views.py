@@ -1,32 +1,20 @@
 from . import serializers, models
 from rest_framework import viewsets, permissions
+from .permissions import *
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-class StaffViewSet(viewsets.ModelViewSet):
-    # permission_classes = [ permissions.IsAuthenticated, ]
+
+class AccountStaffPermissions(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsAccountsStaff]
+
+
+class StaffViewSet(AccountStaffPermissions):
     serializer_class = serializers.StaffSerializer
     queryset = models.Staff.objects.all()
 
 
-    # def update(self, request, *args, **kwargs):
-    #     print(request.method)
-    #     try:
-    #         if len(list(request.data)) > 1:
-    #             obj = models.Staff.objects.get(id=request.data['id'])
-    #             inst = serializers.StaffSerializer(data=request.data)
-    #             if inst.is_valid():
-    #                 inst.save()
-    #             print(obj)
-    #             print(inst)
-    #             return Response(inst)
-    #     except Exception as e:
-    #         # rollbar.report_exc_info(extra_data={'error': e, 'message': e, 'user': request.data })
-    #         return Response({'error': 'Error changing password: ' + str(e)}, status=409)
-
-
-
-class PaySlipViewSet(viewsets.ModelViewSet):
+class PaySlipViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.PaySlipSerializer
     queryset = models.PaySlip.objects.all()
@@ -91,37 +79,37 @@ class PensionViewSet(viewsets.ModelViewSet):
     queryset = models.Pension.objects.all()
 
 
-class PensionCollectorViewSet(viewsets.ModelViewSet):
+class PensionCollectorViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.PensionCollectorSerializer
     queryset = models.PensionCollector.objects.all()
 
 
-class VariableAdjustmentTypeViewSet(viewsets.ModelViewSet):
+class VariableAdjustmentTypeViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.VariableAdjustmentTypeSerializer
     queryset = models.VariableAdjustmentType.objects.all()
 
 
-class VariableAdjustmentViewSet(viewsets.ModelViewSet):
+class VariableAdjustmentViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.VariableAdjustmentSerializer
     queryset = models.VariableAdjustment.objects.all()
     filter_fields = ('payslip__month', 'payslip__year',)
 
-class BankViewSet(viewsets.ModelViewSet):
+class BankViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.BankSerializer
     queryset = models.Bank.objects.all()
 
 
-class BankAccountViewSet(viewsets.ModelViewSet):
+class BankAccountViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.BankAccountSerializer
     queryset = models.BankAccount.objects.all()
 
 
-class SchoolBranchViewSet(viewsets.ModelViewSet):
+class SchoolBranchViewSet(AccountStaffPermissions):
     # permission_classes = [ permissions.IsAuthenticated, ]
     serializer_class = serializers.SchoolBranchSerializer
     queryset = models.SchoolBranch.objects.all()
