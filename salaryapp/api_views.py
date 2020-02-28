@@ -6,7 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class AccountStaffPermissions(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, IsAccountsStaff]
+    # permission_classes = [permissions.IsAuthenticated, IsAccountsStaff]
+    pass
 
 
 class StaffViewSet(AccountStaffPermissions):
