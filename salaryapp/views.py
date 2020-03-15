@@ -35,7 +35,7 @@ def ps_email(request):
                 alert = data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[0]
                 # sender = data[0][1].split(b"ransfer from", 1)[0].split(b"to", 1)[0]
                 # return HttpResponse(data[0][1].split(b"\r\nSubject", 1)[1].split(b"to PRINTSTORE", 1)[0])
-                if 'Credit' in str(alert):
+                if 'Credit' in str(alert) and 'REVERSAL' not in str(alert):
                     msgs.append(str(alert).replace("b': ", '').replace("'", '') + '\r\n')
                     counter = counter + 1
         mail.close()
