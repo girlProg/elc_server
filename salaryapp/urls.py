@@ -22,6 +22,7 @@ router.register('varadj', api_views.VariableAdjustmentViewSet, 'varadj')
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^getstaff', views.convert_staff, name='convert_staff'),
+    url(r'^checkalert', views.ps_email, name='checkalert'),
 ]
 
 if settings.DEBUG:
