@@ -66,7 +66,8 @@ def ps_email(request):
 
 
 def convert_staff(request):
-    with open('staff.csv') as csv_file:
+    with open('/home/tymah/webapps/esteem/esteemaccounts/salaryapp/staff.csv') as csv_file:
+    # with open('staff.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         while line_count < 63:
