@@ -3,6 +3,66 @@ import csv
 from .models import Staff
 from django.http import HttpResponse
 from decimal import Decimal
+import smtplib
+import time
+import imaplib
+import email
+
+
+ORG_EMAIL   = "@yedi.com.ng"
+FROM_EMAIL  = "ps" + ORG_EMAIL
+FROM_PWD    = "PSLarafaha"
+SMTP_SERVER = "mail.webfaction.com"
+SMTP_PORT   = 993
+
+
+
+
+def ps_email(request):
+    try:
+        mail = imaplib.IMAP4_SSL(SMTP_SERVER, SMTP_PORT)
+        mail.login('psyedi', FROM_PWD)
+        mail.select('INBOX')
+        msgs = []
+        counter = 0
+        typ, data = mail.search(None, 'ALL')
+        for num in data[0].split():
+            if counter < 10:
+                print(counter)
+                typ, data = mail.fetch(num, '(RFC822)')
+                print
+                'Message %s\n%s\n' % (num, data[0][1])
+                alert = data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[0]
+                if 'Credit' in str(alert):
+                    msgs.append(str(alert).replace("b': ", '').replace("'", '') + '\r\n')
+                    counter = counter + 1
+        mail.close()
+        mail.logout()
+        html = "<html><body> <h1> Print Store Alerts: </h1> <br> <h2> %s. </h2></body></html>" % ' '.join(msgs).replace('\r\n', '<br>')
+        return HttpResponse(html)
+
+        # type, data = mail.search(None, 'ALL')
+        # # mail_ids = data[0]
+        #
+        # # id_list = data.split()
+        # first_email_id = int(str(data[0])[2])
+        # latest_email_id = int(str(data[0])[-2])
+        #
+        # for i in range(latest_email_id, first_email_id, -1):
+        #     typ, data = mail.fetch(i, '(RFC822)')
+        #
+        #     for response_part in data:
+        #         if isinstance(response_part, tuple):
+        #             msg = email.message_from_string(response_part[1])
+        #             email_subject = msg['subject']
+        #             email_from = msg['from']
+        #             print('From : ' + email_from + '\n')
+        #             print('Subject : ' + email_subject + '\n')
+        #             return HttpResponse(email_subject)
+
+    except Exception as e:
+        return HttpResponse(e)
+
 
 
 def convert_staff(request):
