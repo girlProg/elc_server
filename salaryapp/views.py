@@ -26,13 +26,15 @@ def ps_email(request):
         msgs = []
         counter = 0
         typ, data = mail.search(None, 'ALL')
-        for num in data[0].split():
+        for num in data[0].split()[::-1] :
             if counter < 10:
                 print(counter)
                 typ, data = mail.fetch(num, '(RFC822)')
                 print
                 'Message %s\n%s\n' % (num, data[0][1])
                 alert = data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[0]
+                # sender = data[0][1].split(b"ransfer from", 1)[0].split(b"to", 1)[0]
+                # return HttpResponse(data[0][1].split(b"\r\nSubject", 1)[1].split(b"to PRINTSTORE", 1)[0])
                 if 'Credit' in str(alert):
                     msgs.append(str(alert).replace("b': ", '').replace("'", '') + '\r\n')
                     counter = counter + 1
