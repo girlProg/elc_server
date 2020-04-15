@@ -68,42 +68,42 @@ def ps_email(request):
 
 
 def convert_staff(request):
-    with open('/home/tymah/webapps/esteem/esteemaccounts/lokogoma_staff.csv') as csv_file:
+    with open('/home/tymah/webapps/esteem/esteemaccounts/wuse_staff.csv') as csv_file:
     # with open('lokogoma_staff.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
-        while line_count < 63:
+        # while line_count < 63:
 
-            for row in csv_reader:
-                name = row[0].strip()
-                salary = Decimal.from_float(float(row[1].strip()))
-                allw = Decimal.from_float(float(row[2].strip()))
-                is_pension = row[3].strip()
-                tax_due = Decimal.from_float(float(row[4].strip()))
-                school_shop = Decimal.from_float(float(row[5].strip()))
-                fees_saladv_loan = Decimal.from_float(float(row[6].strip()))
-                training = Decimal.from_float(float(row[7].strip()))
-                farm = Decimal.from_float(float(row[8].strip()))
-                feeding = Decimal.from_float(float(row[9].strip()))
-                tahfeez = Decimal.from_float(float(row[10].strip()))
-                tobank = Decimal.from_float(float(row[11].strip()))
+        for row in csv_reader:
+            name = row[0].strip()
+            salary = Decimal.from_float(float(row[1].strip()))
+            allw = Decimal.from_float(float(row[2].strip()))
+            is_pension = row[3].strip()
+            tax_due = Decimal.from_float(float(row[4].strip()))
+            # school_shop = Decimal.from_float(float(row[5].strip()))
+            # fees_saladv_loan = Decimal.from_float(float(row[6].strip()))
+            # training = Decimal.from_float(float(row[7].strip()))
+            # farm = Decimal.from_float(float(row[8].strip()))
+            # feeding = Decimal.from_float(float(row[9].strip()))
+            # tahfeez = Decimal.from_float(float(row[10].strip()))
+            # tobank = Decimal.from_float(float(row[11].strip()))
 
-                br, ob = SchoolBranch.objects.get_or_create(name="Lokogoma")
+            br, ob = SchoolBranch.objects.get_or_create(name="Wuse")
 
-                chan = str(school_shop) + str(fees_saladv_loan) + str(training)+str(farm)+ str(tax_due)+ str(tahfeez)+ str(feeding)
+            # chan = str(school_shop) + str(fees_saladv_loan) + str(training)+str(farm)+ str(tax_due)+ str(tahfeez)+ str(feeding)
+            pen = False
+
+            if is_pension == 'TRUE':
+                pen = True
+            else:
                 pen = False
 
-                if is_pension == 'TRUE':
-                    pen = True
-                else:
-                    pen = False
+            staf = Staff.objects.create(name=name, salaryAmount=salary, allowanceforHeads=allw, is_pensioner=pen, schoolBranch=br)
+            payslip = PaySlip.objects.filter(staff=staf)[0]
+            # print("-------" + chan)
+            # print('matching tax for: ' + staf.name) if str(payslip.tax).split('.')[0] == str(tax_due) else print('mismatch tax for: ' + staf.name + ' - (' + str(payslip.tax).split('.')[0] + ' / '  + str(tax_due) + ' - )' )
+            # print('correct alert for: ' + staf.name) if str(payslip.credittobank).split('.')[0] == str(tobank) else print('wrong alert for: ' + staf.name + ' - (' + str(payslip.credittobank).split('.')[0] + ' / '  + str(tobank) + ' - )' )
 
-                staf = Staff.objects.create(name=name, salaryAmount=salary, allowanceforHeads=allw, is_pensioner=pen, schoolBranch=br)
-                payslip = PaySlip.objects.filter(staff=staf)[0]
-                # print("-------" + chan)
-                # print('matching tax for: ' + staf.name) if str(payslip.tax).split('.')[0] == str(tax_due) else print('mismatch tax for: ' + staf.name + ' - (' + str(payslip.tax).split('.')[0] + ' / '  + str(tax_due) + ' - )' )
-                # print('correct alert for: ' + staf.name) if str(payslip.credittobank).split('.')[0] == str(tobank) else print('wrong alert for: ' + staf.name + ' - (' + str(payslip.credittobank).split('.')[0] + ' / '  + str(tobank) + ' - )' )
-
-                line_count += 1
-        print(f'Processed {line_count} lines.')
-        return HttpResponse(line_count)
+            line_count += 1
+    print(f'Processed {line_count} lines.')
+    return HttpResponse(line_count)
