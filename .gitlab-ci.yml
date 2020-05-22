@@ -30,16 +30,16 @@ before_script:
 # To get Django tests to work you may need to create a settings file using
 # the following DATABASES:
 #
-# DATABASES = {
-#     'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'ci',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'postgres',
-#        'PORT': '5432',
-#    },
-# }
+ DATABASES = {
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ci',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'postgres',
+        'PORT': '5432',
+    },
+ }
 #
 # and then adding `--settings app.settings.ci` (or similar) to the test command
 
