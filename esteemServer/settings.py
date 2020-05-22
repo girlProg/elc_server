@@ -85,6 +85,9 @@ DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     'TEST': {
+    #         'NAME': 'mytestdatabase',
+    #     },
     # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -92,7 +95,15 @@ DATABASES = {
         'USERNAME': 'tymah',
         'PASSWORD': 'tyeema',
         'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'PORT': '5432',
+        'TEST': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'ci',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'postgres',
+            'PORT': '5432',
+            },
     }
 }
 
@@ -126,7 +137,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 30,
+    'PAGE_SIZE': 200,
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 
 }
@@ -150,9 +161,13 @@ USE_TZ = True
 
 MEDIA_ROOT = BASE_DIR+'/media/'
 MEDIA_URL = '/media/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = '/home/tymah/webapps/static_esteem/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# MEDIA_ROOT = '/home/tymah/webapps/media_esteem/'
+# MEDIA_URL = 'http://esteemapi.yedite.ch/media/'
+# STATIC_ROOT = '/home/tymah/webapps/static_esteem/'
+# STATIC_URL = 'http://esteemapi.yedite.ch/static/'
 
 STATICFILES_DIRS = ( os.path.join('static'), )
 
