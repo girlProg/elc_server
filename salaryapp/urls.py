@@ -25,6 +25,7 @@ router.register('adjustallstaff', api_views.AdjustAllStaffViewSet, 'adjustallsta
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^getstaff', views.convert_staff, name='convert_staff'),
+    url(r'^lokogomastaff', views.lokogoma_staff, name='lokogoma_staff'),
     url(r'^checkalert', views.ps_email, name='checkalert'),
 ]
 
