@@ -171,17 +171,24 @@ class AdjustAllStaffViewSet(viewsets.ViewSet):
 
         payslips = models.PaySlip.objects.filter(month=month, year=datetime.now().year)
         print(len(payslips))
-        varadj_type = models.VariableAdjustmentType.objects.get_or_create(name='Cummulative')[0]
+        # varadj_type = models.VariableAdjustmentType.objects.get_or_create(name='Cummulative')[0]
 
         for payslip in payslips:
             if amount:
-                models.VariableAdjustment.objects.get_or_create(name=varadj_type, type=type, amount=amount, payslip=payslip)
+                # models.VariableAdjustment.objects.get_or_create(name=varadj_type, type=type, amount=amount, payslip=payslip)
+                sa = payslip.salaryAmount * Decimal.from_float(int(amount))
+                payslip.staff.salaryAmount = payslip.staff.salaryAmount - sa
+                payslip.staff.save()
             if percent:
-                varadj = models.VariableAdjustment.objects.get_or_create(name=varadj_type,
-                                                                         type=type,
-                                                                         amount=payslip.salaryAmount * Decimal.from_float(int(percent)/100),
-                                                                         payslip=payslip)[0]
-                payslip.save()
-                varadj.save()
+                sa = payslip.salaryAmount * Decimal.from_float(int(percent)/100)
+                payslip.staff.salaryAmount = payslip.staff.salaryAmount - sa
+                payslip.staff.save()
+
+                # varadj = models.VariableAdjustment.objects.get_or_create(name=varadj_type,
+                #                                                          type=type,
+                #                                                          amount=payslip.salaryAmount * Decimal.from_float(int(percent)/100),
+                #                                                          payslip=payslip)[0]
+                # payslip.save()
+                # varadj.save()
 
         return Response('adjustments added', status=200)

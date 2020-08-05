@@ -132,6 +132,7 @@ def save_payslip(sender, instance, **kwargs):
 
     # if not instance.salaryAmount:
     # if len(PaySlip.objects.filter(month=instance.month, year=instance.year, staff=instance.staff)) > 0:
+
     instance.salaryAmount = instance.staff.salaryAmount
     instance.tax = instance.staff.tax
     instance.nhis = instance.staff.nhis
