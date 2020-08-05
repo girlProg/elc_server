@@ -1,0 +1,3688 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /auth/users/:
+    get:
+      operationId: listUsers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                      maxLength: 254
+                    id:
+                      type: integer
+                      readOnly: true
+                    username:
+                      type: string
+                      readOnly: true
+                      description: Required. 150 characters or fewer. Letters, digits
+                        and @/./+/-/_ only.
+          description: ''
+    post:
+      operationId: createUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id001
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                username:
+                  type: string
+                  description: Required. 150 characters or fewer. Letters, digits
+                    and @/./+/-/_ only.
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                password:
+                  type: string
+                  writeOnly: true
+              required:
+              - username
+              - password
+          application/x-www-form-urlencoded:
+            schema: *id001
+          multipart/form-data:
+            schema: *id001
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  username:
+                    type: string
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  id:
+                    type: integer
+                    readOnly: true
+                required:
+                - username
+          description: ''
+  /auth/users/me/:
+    get:
+      operationId: meUser
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    put:
+      operationId: meUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id002
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+          application/x-www-form-urlencoded:
+            schema: *id002
+          multipart/form-data:
+            schema: *id002
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    patch:
+      operationId: meUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id003
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+          application/x-www-form-urlencoded:
+            schema: *id003
+          multipart/form-data:
+            schema: *id003
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    delete:
+      operationId: meUser
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+  /auth/users/{id}/:
+    get:
+      operationId: retrieveUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    put:
+      operationId: updateUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id004
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+          application/x-www-form-urlencoded:
+            schema: *id004
+          multipart/form-data:
+            schema: *id004
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    patch:
+      operationId: partial_updateUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id005
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+          application/x-www-form-urlencoded:
+            schema: *id005
+          multipart/form-data:
+            schema: *id005
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  id:
+                    type: integer
+                    readOnly: true
+                  username:
+                    type: string
+                    readOnly: true
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+          description: ''
+    delete:
+      operationId: destroyUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/staff/:
+    get:
+      operationId: listStaffs
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    schoolBranch:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        name:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                        address:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                        pensionID:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                      type: object
+                    pension_collector:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        name:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                        address:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                        pensionID:
+                          type: string
+                          nullable: true
+                          maxLength: 500
+                      type: object
+                    bankAccount:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          bank:
+                            properties:
+                              id:
+                                type: integer
+                                readOnly: true
+                              created:
+                                type: string
+                                format: date-time
+                                readOnly: true
+                              modified:
+                                type: string
+                                format: date-time
+                                readOnly: true
+                              name:
+                                type: string
+                                maxLength: 500
+                            type: object
+                            readOnly: true
+                          created:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          modified:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          number:
+                            type: string
+                            nullable: true
+                            maxLength: 11
+                          staff:
+                            type: integer
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pension_code:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    _id:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    salaryAmount:
+                      type: number
+                    grossIncome:
+                      type: number
+                    nhis:
+                      type: number
+                    allowanceforHeads:
+                      type: number
+                    isCurrentStaff:
+                      type: boolean
+                      nullable: true
+                    tax:
+                      type: number
+                    isAccountsStaff:
+                      type: boolean
+                      nullable: true
+                  required:
+                  - schoolBranch
+                  - pension_collector
+                  - bankAccount
+          description: ''
+    post:
+      operationId: createStaff
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id006
+              properties:
+                schoolBranch:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                pension_collector:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                bankAccount:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      bank:
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          created:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          modified:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          name:
+                            type: string
+                            maxLength: 500
+                        type: object
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      number:
+                        type: string
+                        nullable: true
+                        maxLength: 11
+                      staff:
+                        type: integer
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pension_code:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                _id:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                isCurrentStaff:
+                  type: boolean
+                  nullable: true
+                tax:
+                  type: number
+                isAccountsStaff:
+                  type: boolean
+                  nullable: true
+              required:
+              - schoolBranch
+              - pension_collector
+              - bankAccount
+          application/x-www-form-urlencoded:
+            schema: *id006
+          multipart/form-data:
+            schema: *id006
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  schoolBranch:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  pension_collector:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  bankAccount:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        bank:
+                          properties:
+                            id:
+                              type: integer
+                              readOnly: true
+                            created:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            modified:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            name:
+                              type: string
+                              maxLength: 500
+                          type: object
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        number:
+                          type: string
+                          nullable: true
+                          maxLength: 11
+                        staff:
+                          type: integer
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pension_code:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  _id:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  isCurrentStaff:
+                    type: boolean
+                    nullable: true
+                  tax:
+                    type: number
+                  isAccountsStaff:
+                    type: boolean
+                    nullable: true
+                required:
+                - schoolBranch
+                - pension_collector
+                - bankAccount
+          description: ''
+  /api/staff/{id}/:
+    get:
+      operationId: retrieveStaff
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this staff.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  schoolBranch:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  pension_collector:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  bankAccount:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        bank:
+                          properties:
+                            id:
+                              type: integer
+                              readOnly: true
+                            created:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            modified:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            name:
+                              type: string
+                              maxLength: 500
+                          type: object
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        number:
+                          type: string
+                          nullable: true
+                          maxLength: 11
+                        staff:
+                          type: integer
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pension_code:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  _id:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  isCurrentStaff:
+                    type: boolean
+                    nullable: true
+                  tax:
+                    type: number
+                  isAccountsStaff:
+                    type: boolean
+                    nullable: true
+                required:
+                - schoolBranch
+                - pension_collector
+                - bankAccount
+          description: ''
+    put:
+      operationId: updateStaff
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this staff.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id007
+              properties:
+                schoolBranch:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                pension_collector:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                bankAccount:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      bank:
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          created:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          modified:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          name:
+                            type: string
+                            maxLength: 500
+                        type: object
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      number:
+                        type: string
+                        nullable: true
+                        maxLength: 11
+                      staff:
+                        type: integer
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pension_code:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                _id:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                isCurrentStaff:
+                  type: boolean
+                  nullable: true
+                tax:
+                  type: number
+                isAccountsStaff:
+                  type: boolean
+                  nullable: true
+              required:
+              - schoolBranch
+              - pension_collector
+              - bankAccount
+          application/x-www-form-urlencoded:
+            schema: *id007
+          multipart/form-data:
+            schema: *id007
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  schoolBranch:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  pension_collector:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  bankAccount:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        bank:
+                          properties:
+                            id:
+                              type: integer
+                              readOnly: true
+                            created:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            modified:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            name:
+                              type: string
+                              maxLength: 500
+                          type: object
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        number:
+                          type: string
+                          nullable: true
+                          maxLength: 11
+                        staff:
+                          type: integer
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pension_code:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  _id:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  isCurrentStaff:
+                    type: boolean
+                    nullable: true
+                  tax:
+                    type: number
+                  isAccountsStaff:
+                    type: boolean
+                    nullable: true
+                required:
+                - schoolBranch
+                - pension_collector
+                - bankAccount
+          description: ''
+    patch:
+      operationId: partial_updateStaff
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this staff.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id008
+              properties:
+                schoolBranch:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                pension_collector:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                  type: object
+                bankAccount:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      bank:
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          created:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          modified:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          name:
+                            type: string
+                            maxLength: 500
+                        type: object
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      number:
+                        type: string
+                        nullable: true
+                        maxLength: 11
+                      staff:
+                        type: integer
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pension_code:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                _id:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                isCurrentStaff:
+                  type: boolean
+                  nullable: true
+                tax:
+                  type: number
+                isAccountsStaff:
+                  type: boolean
+                  nullable: true
+          application/x-www-form-urlencoded:
+            schema: *id008
+          multipart/form-data:
+            schema: *id008
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  schoolBranch:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  pension_collector:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      address:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                      pensionID:
+                        type: string
+                        nullable: true
+                        maxLength: 500
+                    type: object
+                  bankAccount:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        bank:
+                          properties:
+                            id:
+                              type: integer
+                              readOnly: true
+                            created:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            modified:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                            name:
+                              type: string
+                              maxLength: 500
+                          type: object
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        number:
+                          type: string
+                          nullable: true
+                          maxLength: 11
+                        staff:
+                          type: integer
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pension_code:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  _id:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  isCurrentStaff:
+                    type: boolean
+                    nullable: true
+                  tax:
+                    type: number
+                  isAccountsStaff:
+                    type: boolean
+                    nullable: true
+                required:
+                - schoolBranch
+                - pension_collector
+                - bankAccount
+          description: ''
+    delete:
+      operationId: destroyStaff
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this staff.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/payslip/:
+    get:
+      operationId: listPaySlips
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    basic:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    housing:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    transport:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    meal:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    utility:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    entertainment:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    education:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    dressing:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    domestic:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    pension:
+                      type: array
+                      items:
+                        properties:
+                          amount:
+                            type: number
+                          constant:
+                            type: number
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    tax:
+                      type: number
+                    month:
+                      type: string
+                      nullable: true
+                      default: '1'
+                      maxLength: 500
+                    year:
+                      type: string
+                      nullable: true
+                      default: '2020'
+                      maxLength: 500
+                    credittobank:
+                      type: number
+                    salaryAmount:
+                      type: number
+                    grossIncome:
+                      type: number
+                    nhis:
+                      type: number
+                    allowanceforHeads:
+                      type: number
+                    staff:
+                      type: integer
+                  required:
+                  - staff
+          description: ''
+    post:
+      operationId: createPaySlip
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id009
+              properties:
+                basic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                housing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                transport:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                meal:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                utility:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                entertainment:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                education:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                dressing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                domestic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                pension:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                tax:
+                  type: number
+                month:
+                  type: string
+                  nullable: true
+                  default: '1'
+                  maxLength: 500
+                year:
+                  type: string
+                  nullable: true
+                  default: '2020'
+                  maxLength: 500
+                credittobank:
+                  type: number
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                staff:
+                  type: integer
+              required:
+              - staff
+          application/x-www-form-urlencoded:
+            schema: *id009
+          multipart/form-data:
+            schema: *id009
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  basic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  housing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  transport:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  meal:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  utility:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  entertainment:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  education:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  dressing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  domestic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  pension:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  tax:
+                    type: number
+                  month:
+                    type: string
+                    nullable: true
+                    default: '1'
+                    maxLength: 500
+                  year:
+                    type: string
+                    nullable: true
+                    default: '2020'
+                    maxLength: 500
+                  credittobank:
+                    type: number
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  staff:
+                    type: integer
+                required:
+                - staff
+          description: ''
+  /api/payslip/{id}/:
+    get:
+      operationId: retrievePaySlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pay slip.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  basic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  housing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  transport:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  meal:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  utility:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  entertainment:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  education:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  dressing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  domestic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  pension:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  tax:
+                    type: number
+                  month:
+                    type: string
+                    nullable: true
+                    default: '1'
+                    maxLength: 500
+                  year:
+                    type: string
+                    nullable: true
+                    default: '2020'
+                    maxLength: 500
+                  credittobank:
+                    type: number
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  staff:
+                    type: integer
+                required:
+                - staff
+          description: ''
+    put:
+      operationId: updatePaySlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pay slip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id010
+              properties:
+                basic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                housing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                transport:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                meal:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                utility:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                entertainment:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                education:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                dressing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                domestic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                pension:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                tax:
+                  type: number
+                month:
+                  type: string
+                  nullable: true
+                  default: '1'
+                  maxLength: 500
+                year:
+                  type: string
+                  nullable: true
+                  default: '2020'
+                  maxLength: 500
+                credittobank:
+                  type: number
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                staff:
+                  type: integer
+              required:
+              - staff
+          application/x-www-form-urlencoded:
+            schema: *id010
+          multipart/form-data:
+            schema: *id010
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  basic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  housing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  transport:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  meal:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  utility:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  entertainment:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  education:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  dressing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  domestic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  pension:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  tax:
+                    type: number
+                  month:
+                    type: string
+                    nullable: true
+                    default: '1'
+                    maxLength: 500
+                  year:
+                    type: string
+                    nullable: true
+                    default: '2020'
+                    maxLength: 500
+                  credittobank:
+                    type: number
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  staff:
+                    type: integer
+                required:
+                - staff
+          description: ''
+    patch:
+      operationId: partial_updatePaySlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pay slip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id011
+              properties:
+                basic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                housing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                transport:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                meal:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                utility:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                entertainment:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                education:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                dressing:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                domestic:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                pension:
+                  type: array
+                  items:
+                    properties:
+                      amount:
+                        type: number
+                      constant:
+                        type: number
+                tax:
+                  type: number
+                month:
+                  type: string
+                  nullable: true
+                  default: '1'
+                  maxLength: 500
+                year:
+                  type: string
+                  nullable: true
+                  default: '2020'
+                  maxLength: 500
+                credittobank:
+                  type: number
+                salaryAmount:
+                  type: number
+                grossIncome:
+                  type: number
+                nhis:
+                  type: number
+                allowanceforHeads:
+                  type: number
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id011
+          multipart/form-data:
+            schema: *id011
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  basic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  housing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  transport:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  meal:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  utility:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  entertainment:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  education:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  dressing:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  domestic:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  pension:
+                    type: array
+                    items:
+                      properties:
+                        amount:
+                          type: number
+                        constant:
+                          type: number
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  tax:
+                    type: number
+                  month:
+                    type: string
+                    nullable: true
+                    default: '1'
+                    maxLength: 500
+                  year:
+                    type: string
+                    nullable: true
+                    default: '2020'
+                    maxLength: 500
+                  credittobank:
+                    type: number
+                  salaryAmount:
+                    type: number
+                  grossIncome:
+                    type: number
+                  nhis:
+                    type: number
+                  allowanceforHeads:
+                    type: number
+                  staff:
+                    type: integer
+                required:
+                - staff
+          description: ''
+    delete:
+      operationId: destroyPaySlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pay slip.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/pfas/:
+    get:
+      operationId: listPensionCollectors
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    name:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    address:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+                    pensionID:
+                      type: string
+                      nullable: true
+                      maxLength: 500
+          description: ''
+    post:
+      operationId: createPensionCollector
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id012
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                address:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pensionID:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+          application/x-www-form-urlencoded:
+            schema: *id012
+          multipart/form-data:
+            schema: *id012
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  address:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pensionID:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+          description: ''
+  /api/pfas/{id}/:
+    get:
+      operationId: retrievePensionCollector
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pension collector.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  address:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pensionID:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+          description: ''
+    put:
+      operationId: updatePensionCollector
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pension collector.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id013
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                address:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pensionID:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+          application/x-www-form-urlencoded:
+            schema: *id013
+          multipart/form-data:
+            schema: *id013
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  address:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pensionID:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+          description: ''
+    patch:
+      operationId: partial_updatePensionCollector
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pension collector.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id014
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                address:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                pensionID:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+          application/x-www-form-urlencoded:
+            schema: *id014
+          multipart/form-data:
+            schema: *id014
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  address:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+                  pensionID:
+                    type: string
+                    nullable: true
+                    maxLength: 500
+          description: ''
+    delete:
+      operationId: destroyPensionCollector
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pension collector.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/bank/:
+    get:
+      operationId: listBankAccounts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    bank:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 500
+                      type: object
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    number:
+                      type: string
+                      nullable: true
+                      maxLength: 11
+                    staff:
+                      type: integer
+          description: ''
+    post:
+      operationId: createBankAccount
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id015
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id015
+          multipart/form-data:
+            schema: *id015
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+  /api/bank/{id}/:
+    get:
+      operationId: retrieveBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    put:
+      operationId: updateBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id016
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id016
+          multipart/form-data:
+            schema: *id016
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    patch:
+      operationId: partial_updateBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id017
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id017
+          multipart/form-data:
+            schema: *id017
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    delete:
+      operationId: destroyBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/bankaccount/:
+    get:
+      operationId: listBankAccounts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    bank:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 500
+                      type: object
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    modified:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    number:
+                      type: string
+                      nullable: true
+                      maxLength: 11
+                    staff:
+                      type: integer
+          description: ''
+    post:
+      operationId: createBankAccount
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id018
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id018
+          multipart/form-data:
+            schema: *id018
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+  /api/bankaccount/{id}/:
+    get:
+      operationId: retrieveBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    put:
+      operationId: updateBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id019
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id019
+          multipart/form-data:
+            schema: *id019
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    patch:
+      operationId: partial_updateBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id020
+              properties:
+                number:
+                  type: string
+                  nullable: true
+                  maxLength: 11
+                staff:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema: *id020
+          multipart/form-data:
+            schema: *id020
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  bank:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      created:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      modified:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                      name:
+                        type: string
+                        maxLength: 500
+                    type: object
+                    readOnly: true
+                  created:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  number:
+                    type: string
+                    nullable: true
+                    maxLength: 11
+                  staff:
+                    type: integer
+          description: ''
+    delete:
+      operationId: destroyBankAccount
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this bank account.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /auth/users/activation/:
+    post:
+      operationId: activationUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id021
+              properties:
+                uid:
+                  type: string
+                token:
+                  type: string
+              required:
+              - uid
+              - token
+          application/x-www-form-urlencoded:
+            schema: *id021
+          multipart/form-data:
+            schema: *id021
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  uid:
+                    type: string
+                  token:
+                    type: string
+                required:
+                - uid
+                - token
+          description: ''
+  /auth/users/resend_activation/:
+    post:
+      operationId: resend_activationUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id022
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+              - email
+          application/x-www-form-urlencoded:
+            schema: *id022
+          multipart/form-data:
+            schema: *id022
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                required:
+                - email
+          description: ''
+  /auth/users/reset_password/:
+    post:
+      operationId: reset_passwordUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id023
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+              - email
+          application/x-www-form-urlencoded:
+            schema: *id023
+          multipart/form-data:
+            schema: *id023
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                required:
+                - email
+          description: ''
+  /auth/users/reset_password_confirm/:
+    post:
+      operationId: reset_password_confirmUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id024
+              properties:
+                uid:
+                  type: string
+                token:
+                  type: string
+                new_password:
+                  type: string
+              required:
+              - uid
+              - token
+              - new_password
+          application/x-www-form-urlencoded:
+            schema: *id024
+          multipart/form-data:
+            schema: *id024
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  uid:
+                    type: string
+                  token:
+                    type: string
+                  new_password:
+                    type: string
+                required:
+                - uid
+                - token
+                - new_password
+          description: ''
+  /auth/users/reset_username/:
+    post:
+      operationId: reset_usernameUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id025
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+              - email
+          application/x-www-form-urlencoded:
+            schema: *id025
+          multipart/form-data:
+            schema: *id025
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                required:
+                - email
+          description: ''
+  /auth/users/reset_username_confirm/:
+    post:
+      operationId: reset_username_confirmUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id026
+              properties:
+                new_username:
+                  type: string
+                  description: Required. 150 characters or fewer. Letters, digits
+                    and @/./+/-/_ only.
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+              required:
+              - new_username
+          application/x-www-form-urlencoded:
+            schema: *id026
+          multipart/form-data:
+            schema: *id026
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  new_username:
+                    type: string
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                required:
+                - new_username
+          description: ''
+  /auth/users/set_password/:
+    post:
+      operationId: set_passwordUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id027
+              properties:
+                new_password:
+                  type: string
+                current_password:
+                  type: string
+              required:
+              - new_password
+              - current_password
+          application/x-www-form-urlencoded:
+            schema: *id027
+          multipart/form-data:
+            schema: *id027
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  new_password:
+                    type: string
+                  current_password:
+                    type: string
+                required:
+                - new_password
+                - current_password
+          description: ''
+  /auth/users/set_username/:
+    post:
+      operationId: set_usernameUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id028
+              properties:
+                new_username:
+                  type: string
+                  description: Required. 150 characters or fewer. Letters, digits
+                    and @/./+/-/_ only.
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+              required:
+              - new_username
+          application/x-www-form-urlencoded:
+            schema: *id028
+          multipart/form-data:
+            schema: *id028
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  new_username:
+                    type: string
+                    description: Required. 150 characters or fewer. Letters, digits
+                      and @/./+/-/_ only.
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                required:
+                - new_username
+          description: ''
+  /auth/token/login/:
+    post:
+      operationId: CreateTokenCreate
+      description: Use this endpoint to obtain user authentication token.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id029
+              properties:
+                password:
+                  type: string
+                username:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema: *id029
+          multipart/form-data:
+            schema: *id029
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  password:
+                    type: string
+                  username:
+                    type: string
+          description: ''
+  /auth/token/logout/:
+    post:
+      operationId: CreateTokenDestroy
+      description: Use this endpoint to logout user (remove user authentication token).
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''

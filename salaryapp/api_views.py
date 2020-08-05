@@ -3,10 +3,13 @@ from rest_framework import viewsets, permissions
 from .permissions import *
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from decimal import Decimal
 
 
 class AccountStaffPermissions(viewsets.ModelViewSet):
-    # permission_classes = [permissions.IsAuthenticated, IsAccountsStaff]
+    # permission_classes = [permissions.IsAuthenticated, IsAccountsStaff, IsSchoolAccountActiveForStaff]
     pass
 
 
@@ -115,3 +118,70 @@ class SchoolBranchViewSet(AccountStaffPermissions):
     serializer_class = serializers.SchoolBranchSerializer
     queryset = models.SchoolBranch.objects.all()
 
+
+class GenerateCurrentMonthPayslipsViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        if len(models.PaySlip.objects.filter(month=datetime.today().month,year=datetime.today().year)) < 1:
+            for staff in models.Staff.objects.all():
+                if staff.isCurrentStaff:
+                    models.PaySlip.objects.get_or_create(
+                        month=str(datetime.today().month),
+                        year=str(datetime.today().year),
+                        staff=staff
+                    )
+        return Response('current month updated', status=200)
+
+
+class GenerateNextMonthPayslipsViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        date_after_month = datetime.today() + relativedelta(months=1)
+        if len(models.PaySlip.objects.filter(month=date_after_month.month, year=date_after_month.year)) < 1:
+            for staff in models.Staff.objects.all():
+                if staff.isCurrentStaff:
+                    date_after_month = datetime.today() + relativedelta(months=1)
+                    models.PaySlip.objects.get_or_create(
+                        month=str(date_after_month.month),
+                        year=str(date_after_month.year),
+                        staff=staff
+                    )
+        return Response('next month generated', status=200)
+
+
+class AdjustAllStaffViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        amount = 0
+        percent = 0
+        type = 0
+        month=0
+
+        if 'amount' in request.query_params.keys():
+            amount = request.query_params['amount']
+
+        if 'percent' in request.query_params.keys():
+            percent = request.query_params['percent']
+
+        if 'type' in request.query_params.keys():
+            type = request.query_params['type']
+
+        if 'month' in request.query_params.keys():
+            month = request.query_params['month']
+
+        payslips = models.PaySlip.objects.filter(month=month, year=datetime.now().year)
+        print(len(payslips))
+        varadj_type = models.VariableAdjustmentType.objects.get_or_create(name='Cummulative')[0]
+
+        for payslip in payslips:
+            if amount:
+                models.VariableAdjustment.objects.get_or_create(name=varadj_type, type=type, amount=amount, payslip=payslip)
+            if percent:
+                varadj = models.VariableAdjustment.objects.get_or_create(name=varadj_type,
+                                                                         type=type,
+                                                                         amount=payslip.salaryAmount * Decimal.from_float(int(percent)/100),
+                                                                         payslip=payslip)[0]
+                payslip.save()
+                varadj.save()
+
+        return Response('adjustments added', status=200)

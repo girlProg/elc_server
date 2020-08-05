@@ -1,5 +1,5 @@
 """esteemServer URL Configuration
-    yedite.ch
+    yedite.ch 2019
 """
 
 
@@ -11,6 +11,7 @@ from rest_framework.schemas import get_schema_view
 
 urlpatterns = [
 
+    path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path(r'auth/', include('djoser.urls')),
     path(r'auth/', include('djoser.urls.authtoken')),

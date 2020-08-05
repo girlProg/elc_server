@@ -7,7 +7,8 @@ import smtplib
 import time
 import imaplib
 import email
-
+from email import policy
+from email.parser import BytesParser
 
 ORG_EMAIL   = "@yedi.com.ng"
 FROM_EMAIL  = "ps" + ORG_EMAIL
@@ -26,13 +27,24 @@ def ps_email(request):
         msgs = []
         counter = 0
         typ, data = mail.search(None, 'ALL')
+
+
         for num in data[0].split()[::-1] :
             if counter < 10:
                 print(counter)
                 typ, data = mail.fetch(num, '(RFC822)')
-                print
-                'Message %s\n%s\n' % (num, data[0][1])
+                # print ('Message %s\n%s\n' % (num, data[0][1]))
                 alert = data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[0]
+
+                with open(data[0][1], 'rb') as fp:
+                    msg = BytesParser(policy=policy.default).parse(fp)
+
+                # Now the header items can be accessed as a dictionary, and any non-ASCII will
+                # be converted to unicode:
+                    print('To:', msg['to'])
+                    print('From:', msg['from'])
+                    print('Subject:', msg['subject'])
+
                 # sender = data[0][1].split(b"ransfer from", 1)[0].split(b"to", 1)[0]
                 # return HttpResponse(data[0][1].split(b"\r\nSubject", 1)[1].split(b"to PRINTSTORE", 1)[0])
                 if 'Credit' in str(alert) and 'REVERSAL' not in str(alert):

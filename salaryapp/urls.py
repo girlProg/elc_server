@@ -15,6 +15,9 @@ router.register('bankaccount', api_views.BankAccountViewSet, 'bankaccount')
 router.register('schoolbranch', api_views.SchoolBranchViewSet, 'schoolbranch')
 router.register('varadjtype', api_views.VariableAdjustmentTypeViewSet, 'varadjtype')
 router.register('varadj', api_views.VariableAdjustmentViewSet, 'varadj')
+router.register('generatethismonth', api_views.GenerateCurrentMonthPayslipsViewSet, 'thismonth')
+router.register('generatenextmonth', api_views.GenerateNextMonthPayslipsViewSet, 'nextmonth')
+router.register('adjustallstaff', api_views.AdjustAllStaffViewSet, 'adjustallstaff')
 
 
 # urlpatterns = router.urls

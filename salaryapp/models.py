@@ -22,9 +22,19 @@ class Profile(User, ParentModel):
     pass
 
 
+
+
+class Account(ParentModel):
+    is_active = models.BooleanField(default=False, blank=True, null=True)
+
+
 class School(ParentModel):
     name = models.CharField(default="", max_length=500, blank=True, null=True)
     address = models.CharField(default="", max_length=500, blank=True, null=True)
+    account = models.ForeignKey(Account, related_name='account', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('account', 'name')
 
     def __str__(self):
         return self.name
