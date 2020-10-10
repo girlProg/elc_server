@@ -16,9 +16,10 @@ urlpatterns = [
     path(r'auth/', include('djoser.urls')),
     path(r'auth/', include('djoser.urls.authtoken')),
     path(r'api/', include('salaryapp.urls')),
-    path(r'docs/', include_docs_urls(title='Esteem API')),
-    path('openapi', get_schema_view(
-        title="Your Project",
-        description="API for all things …"
-    ), name='openapi-schema'),
+    path(r'bankalerts/', include('bankalerts.urls')),
+    # path(r'docs/', include_docs_urls(title='Esteem API')),
+    # path('openapi', get_schema_view(
+    #     title="Your Project",
+    #     description="API for all things …"
+    # ), name='openapi-schema'),
 ]
