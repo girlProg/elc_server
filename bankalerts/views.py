@@ -161,5 +161,5 @@ def fb_parser_view(request):
 
 def fix_american_date(date_str):
     splits = date_str.split(' ')[0].split('/')
-    newdate = f'{splits[1]}/{splits[0]}/{splits[2]} {date_str.split(" ")[1]}'
+    newdate = f'{splits[1]}/{splits[0]}/{splits[2]} {date_str.split(" ")[1]} {date_str.split(" ")[2]}'
     return newdate
