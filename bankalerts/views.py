@@ -98,6 +98,7 @@ def fb_parser_view(request):
                 sender = email.message_from_bytes(data[0][1].split(b'\r\nFrom: ')[1].split(b'>\r\n')[0]).as_string()
                 if 'firstbank' in sender.lower():
                     # print('we have a first bank alert')
+                    # alert = email.message_from_bytes(data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string().replace('=\n', '',20)
                     alert = email.message_from_bytes(data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string()
                     if (len(alert.split("Account Number:</h1></td><td wid=\nth=3D\'58%\'><h1>")) > 1):
                         account_number = alert.split("Account Number:</h1></td><td wid=\nth=3D\'58%\'><h1>")[1].split('</h1>')[0].replace('=\n', '', 3)
@@ -112,7 +113,7 @@ def fb_parser_view(request):
                     if len(alert.split('Transaction Date:</h1></td><td><h1>')) > 1:
                         date = alert.split('Transaction Date:</h1></td><td><h1>')[1].split('</h1>')[0]
                     else:
-                        date = ''
+                        date = alert.replace('=\n', '',20).split('Transaction Date:</h1></td><td><h1>')[1].split('</h1>')[0]
                     msgs.append(f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
                 elif 'saf@saf.ng' in sender:
@@ -155,4 +156,4 @@ def fb_parser_view(request):
         return HttpResponse(html)
 
     except Exception as e:
-        return HttpResponse('Please email hello@yedite.ch to inform them the server is down. \n'+ e)
+        return HttpResponse('Please email hello@yedite.ch to inform them the server is down. <br>'+ str(e))
