@@ -112,7 +112,7 @@ def fb_parser_view(request):
                     if len(alert.split('Transaction Date:</h1></td><td><h1>')) > 1:
                         date = alert.split('Transaction Date:</h1></td><td><h1>')[1].split('</h1>')[0]
                     else:
-                        pass
+                        date = ''
                     msgs.append(f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
                 elif 'saf@saf.ng' in sender:
