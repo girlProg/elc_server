@@ -132,7 +132,7 @@ def fb_parser_view(request):
                     account_number = alert[2].split('</td')[0]
                     remark = alert[3].split('</td')[0]
                     amount = alert[6].split('</td')[0]
-                    date = alert[7].split('</td')[0]
+                    date = fix_american_date(alert[7].split('</td')[0])
                     msgs.append(
                         f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>   Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
@@ -157,3 +157,9 @@ def fb_parser_view(request):
 
     except Exception as e:
         return HttpResponse('Please email hello@yedite.ch to inform them the server is down. <br>'+ str(e))
+
+
+def fix_american_date(date_str):
+    splits = date_str.split(' ')[0].split('/')
+    newdate = f'{splits[1]}/{splits[0]}/{splits[2]} {date_str.split(" ")[1]}'
+    return newdate
