@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -182,5 +183,4 @@ SERVER_EMAIL = 'noreply@motorfixr.com'
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Configure Django App for Heroku.
-import django_heroku
 django_heroku.settings(locals())
