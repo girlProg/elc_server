@@ -134,8 +134,8 @@ def convert_staff(request):
 
 
 def lokogoma_staff(request):
-    with open('/home/tymah/webapps/esteem/esteemaccounts/lokogoma_staff.csv') as csv_file:
-    # with open('lokogoma_staff.csv') as csv_file:
+    # with open('/ 3/tymah/webapps/esteem/esteemaccounts/lokogoma_staff.csv') as csv_file:
+    with open('lokogoma_staff.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         # while line_count < 63:
