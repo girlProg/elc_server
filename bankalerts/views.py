@@ -93,10 +93,10 @@ def fb_parser_view(request):
 
 
         for num in data[0].split()[::-1] :
-            if counter < 49:
+            if counter < 59:
 
                 typ, data = mail.fetch(num, '(RFC822)')
-                if 'statement' not in email.message_from_bytes(data[0][1].split(b'\r\nSubject: ')[1].split(b'>\r\n')[0]).as_string().lower():
+                if 'credit' in email.message_from_bytes(data[0][1].split(b'\r\nSubject: ')[1].split(b'>\r\n')[0]).as_string().lower():
                     sender = email.message_from_bytes(data[0][1].split(b'\r\nFrom: ')[1].split(b'>\r\n')[0]).as_string()
                     if 'firstbank' in sender.lower():
                         # print('we have a first bank alert')
