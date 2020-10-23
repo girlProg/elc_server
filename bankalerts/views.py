@@ -91,7 +91,6 @@ def fb_parser_view(request):
         counter = 0
         typ, data = mail.search(None, 'ALL')
 
-
         for num in data[0].split()[::-1] :
             if counter < 59:
 
