@@ -92,7 +92,7 @@ def fb_parser_view(request):
         typ, data = mail.search(None, 'ALL')
 
         for num in data[0].split()[::-1] :
-            if counter < 59:
+            if counter < 49:
 
                 typ, data = mail.fetch(num, '(RFC822)')
                 if 'credit' in email.message_from_bytes(data[0][1].split(b'\r\nSubject: ')[1].split(b'>\r\n')[0]).as_string().lower():
