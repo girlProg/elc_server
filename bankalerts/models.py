@@ -7,3 +7,10 @@ class ParentModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['-modified']
+
+
+class BotChat(ParentModel):
+    chat_id = models.CharField(default="", max_length=500, blank=True, null=True)
+    email = models.CharField(default="", max_length=500, blank=True, null=True)
+    email_pw = models.CharField(default="", max_length=500, blank=True, null=True)
+    uid = models.CharField(default="", max_length=500, blank=True, null=True)

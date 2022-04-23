@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 import imaplib
 import email
-
+from . import bot
 
 ORG_EMAIL   = "@yedi.com.ng"
 FROM_EMAIL  = "esteem.acct" + ORG_EMAIL
