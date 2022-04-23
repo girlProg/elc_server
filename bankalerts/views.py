@@ -7,7 +7,7 @@ import email
 ORG_EMAIL   = "@yedi.com.ng"
 FROM_EMAIL  = "esteem.acct" + ORG_EMAIL
 FROM_PWD    = "WIeTyT5ceIklDSOP"
-SMTP_SERVER = "imap.us.opalstack.com"
+SMTP_SERVER = "imap1.us.opalstack.com"
 SMTP_PORT   = 993
 
 
