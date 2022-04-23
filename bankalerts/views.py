@@ -6,8 +6,8 @@ import email
 
 ORG_EMAIL   = "@yedi.com.ng"
 FROM_EMAIL  = "esteem.acct" + ORG_EMAIL
-FROM_PWD    = "esteemacct"
-SMTP_SERVER = "mail.webfaction.com"
+FROM_PWD    = "WIeTyT5ceIklDSOP"
+SMTP_SERVER = "imap.us.opalstack.com"
 SMTP_PORT   = 993
 
 
@@ -91,52 +91,53 @@ def fb_parser_view(request):
         counter = 0
         typ, data = mail.search(None, 'ALL')
 
-
         for num in data[0].split()[::-1] :
             if counter < 49:
+
                 typ, data = mail.fetch(num, '(RFC822)')
-                sender = email.message_from_bytes(data[0][1].split(b'\r\nFrom: ')[1].split(b'>\r\n')[0]).as_string()
-                if 'firstbank' in sender.lower():
-                    # print('we have a first bank alert')
-                    alert = email.message_from_bytes(data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string().replace('=\n', '',50)
-                    account_number = alert.split("Account Number:</h1></td><td width=3D'58%'><h1>")[1].split('</h1>')[0].replace('=\n', '', 3)
-                    remark = alert.split('Transaction Narrative:</h1></td><td><h1>')[1].split('</h1>')[0].replace('=\n','', 3)
-                    amount = alert.split('Amount:</h1></td><td><h1><strike>N</strike>')[1].split('<h1>')[0]
-                    date = alert.split('Transaction Date:</h1></td><td><h1>')[1].split('</h1>')[0]
-                    msgs.append( f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
+                if 'credit' in email.message_from_bytes(data[0][1].split(b'\r\nSubject: ')[1].split(b'>\r\n')[0]).as_string().lower():
+                    sender = email.message_from_bytes(data[0][1].split(b'\r\nFrom: ')[1].split(b'>\r\n')[0]).as_string()
+                    if 'firstbank' in sender.lower():
+                        # print('we have a first bank alert')
+                        alert = email.message_from_bytes(data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string().replace('=\n', '',50)
+                        account_number = alert.split("Account Number:</h1></td><td width=3D'58%'><h1>")[1].split('</h1>')[0].replace('=\n', '', 3)
+                        remark = alert.split('Transaction Narrative:</h1></td><td><h1>')[1].split('</h1>')[0].replace('=\n','', 3)
+                        amount = alert.split('Amount:</h1></td><td><h1><strike>N</strike>')[1].split('<h1>')[0]
+                        date = alert.split('Transaction Date:</h1></td><td><h1>')[1].split('</h1>')[0]
+                        msgs.append( f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
-                elif 'saf@saf.ng' in sender:
-                    # print('/e have a sterling bank alert')
-                    alert = email.message_from_bytes(data[0][1].split(b"\r\nFrom")[1]).as_string()
-                    remark = alert.split('Date/Time:')[1].split('bold;">')[3].split('</sp')[0].replace('=\n', '', 3)
-                    account_number = alert.split('Date/Time:')[1].split('bold;">')[2].split('</s')[0].replace('=\n', '', 3)
-                    amount = alert.split('Date/Time:')[1].split('bold;">')[4].split('</sp')[0].replace('NGN ', '')
-                    date = alert.split('Date/Time:')[1].split('bold;">')[1].split('</span')[0].replace('=\n', '')
-                    msgs.append(
-                        f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
+                    elif 'saf@saf.ng' in sender:
+                        # print('/e have a sterling bank alert')
+                        alert = email.message_from_bytes(data[0][1].split(b"\r\nFrom")[1]).as_string()
+                        remark = alert.split('Date/Time:')[1].split('bold;">')[3].split('</sp')[0].replace('=\n', '', 3)
+                        account_number = alert.split('Date/Time:')[1].split('bold;">')[2].split('</s')[0].replace('=\n', '', 3)
+                        amount = alert.split('Date/Time:')[1].split('bold;">')[4].split('</sp')[0].replace('NGN ', '')
+                        date = alert.split('Date/Time:')[1].split('bold;">')[1].split('</span')[0].replace('=\n', '')
+                        msgs.append(
+                            f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
-                elif 'jaiz' in sender:
-                    # print('we have a jaiz bank alert')
-                    alert = email.message_from_bytes(data[0][1]).as_string().split('!important;">')
-                    account_number = alert[2].split('</td')[0]
-                    remark = alert[3].split('</td')[0]
-                    amount = alert[6].split('</td')[0]
-                    date = fix_american_date(alert[7].split('</td')[0])
-                    msgs.append(
-                        f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>   Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
+                    elif 'jaiz' in sender:
+                        # print('we have a jaiz bank alert')
+                        alert = email.message_from_bytes(data[0][1]).as_string().split('!important;">')
+                        account_number = alert[2].split('</td')[0]
+                        remark = alert[3].split('</td')[0]
+                        amount = alert[6].split('</td')[0]
+                        date = fix_american_date(alert[7].split('</td')[0])
+                        msgs.append(
+                            f'  {date} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>   Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
-                elif 'gtbank' in sender:
-                    # print('we have a gtbank bank alert')
-                    alert = email.message_from_bytes( data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string()
-                    account_number = alert.split('Account Number')[1].split('Transaction Location')[0].strip().replace('=20', '', 20).replace(':\n', '')
-                    remark = alert.split('Remarks')[1].split('Time of Transaction')[0].strip().replace('=20', '', 20).replace(':\n', '')
-                    amount = alert.split('Amount')[1].split('Value Date')[0].strip().replace('=20', '', 20).replace(':\n', '')
-                    date = alert.split('Value Date')[1].split('Remarks')[0].strip().replace('=20', '', 20).replace(':\n', '')
-                    time = alert.split('Time of Transaction')[1].split('Document Number')[0].strip().replace('=20', '', 20).replace(':\n', '')
-                    msgs.append(
-                        f'  {date} - {time} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
+                    elif 'gtbank' in sender:
+                        # print('we have a gtbank bank alert')
+                        alert = email.message_from_bytes( data[0][1].split(b"\r\nSubject", 1)[1].split(b"\r\nDate:", 1)[1]).as_string()
+                        account_number = alert.split('Account Number')[1].split('Transaction Location')[0].strip().replace('=20', '', 20).replace(':\n', '')
+                        remark = alert.split('Remarks')[1].split('Time of Transaction')[0].strip().replace('=20', '', 20).replace(':\n', '')
+                        amount = alert.split('Amount')[1].split('Value Date')[0].strip().replace('=20', '', 20).replace(':\n', '')
+                        date = alert.split('Value Date')[1].split('Remarks')[0].strip().replace('=20', '', 20).replace(':\n', '')
+                        time = alert.split('Time of Transaction')[1].split('Document Number')[0].strip().replace('=20', '', 20).replace(':\n', '')
+                        msgs.append(
+                            f'  {date} - {time} <br> Bank: {sender.replace("<", "").replace(">", "")} <br> Account Number: {account_number} <br>  Amount: ₦{amount} <br> Remarks: {remark} <br><br>')
 
-                counter = counter + 1
+                    counter = counter + 1
         mail.close()
         mail.logout()
         html = "<html><body> <h1> ELC Lokogoma Alerts: </h1> " \

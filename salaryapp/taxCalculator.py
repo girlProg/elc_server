@@ -61,7 +61,7 @@ def calculate_monthly_tax(monthly_gross, crf, pa, monthly_pension, nhis):
                 second_tax_constant_300 +
                 third_tax_constant_500 +
                 fourth_tax_constant_500 +
-                fifth_tax_constant_500) + sixth_tranche_calc + Decimal.from_float(12)
+                fifth_tax_constant_500 + sixth_tranche_calc) + Decimal.from_float(12)
 
 
 

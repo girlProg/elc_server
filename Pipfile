@@ -17,6 +17,8 @@ django-filter = "*"
 python-dateutil = "*"
 coverage = "*"
 python-dotenv = "*"
+django-heroku = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
